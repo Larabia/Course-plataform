@@ -29,7 +29,7 @@ public class CursoController {
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta curso", description = "Ingrasa un objeto curso a la base de datos")
 	
-	public ResponseEntity<Curso> altaUsuairo(@RequestBody Curso curso) {
+	public ResponseEntity<Curso> altaCurso(@RequestBody Curso curso) {
 				
 		log.info("metodo: altaCurso.");
 		cursoRepo.save(curso);
