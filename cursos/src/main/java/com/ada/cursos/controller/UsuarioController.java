@@ -27,7 +27,7 @@ public class UsuarioController {
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta usuario", description = "Ingrasa un objeto usuario a la base de datos")
 	
-	public ResponseEntity<Usuario> altaUsuairo(@RequestBody LoginForm loginForm) {
+	public ResponseEntity<Usuario> altaUsuario(@RequestBody LoginForm loginForm) {
 				
 		log.info("metodo: altaUsuario.");
 		
