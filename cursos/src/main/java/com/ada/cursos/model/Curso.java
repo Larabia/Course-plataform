@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table (name = "Curso")
 public class Curso {
@@ -16,6 +18,8 @@ public class Curso {
 	private Long id;
 	private String nombre;
 	private int horas;
+	
+	@JsonBackReference
     @ManyToOne
     @JoinColumn(name="emp_id", nullable=false)
     private Empresa empresa;

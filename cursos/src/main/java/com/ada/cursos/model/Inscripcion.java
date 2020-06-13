@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 public class Inscripcion {
@@ -16,10 +18,12 @@ public class Inscripcion {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alumno_id")
     private Alumno alumno;
-
+	
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "curso_id")
 	private Curso curso;

@@ -17,7 +17,7 @@ import com.ada.cursos.model.Rep;
 
 import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.repository.RepRepository;
-
+import com.ada.cursos.service.EmpresaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -27,10 +27,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class EmpresaController {
 	
 	@Autowired
-	private RepRepository repRepo;
+	private EmpresaRepository empresaRepo;
 	
 	@Autowired
-	private EmpresaRepository empresaRepo;
+	private EmpresaService empresaServ;
 	
 	Logger log = Logger.getLogger(EmpresaRepository.class.getName());
 
@@ -43,16 +43,9 @@ public class EmpresaController {
 		
 		log.info("metodo: altaEmpresa.");
 		
-		Empresa empresa = new Empresa();
-		
-		java.util.Optional<Rep> repOp = repRepo.findById(empresaForm.getRepId());
-		Rep rep = repOp.get();
-		
-		empresa.setNombre(empresaForm.getNombre());
-		empresa.setCuil(empresaForm.getCuil());;
-		empresa.setRep(rep);
-		
+		Empresa empresa = empresaServ.generarEmpresaDeForm(empresaForm);
 		empresaRepo.save(empresa);
+		
 		log.info("metodo: Empresa guardada.");
 
 		return new ResponseEntity<>(empresa, HttpStatus.CREATED);

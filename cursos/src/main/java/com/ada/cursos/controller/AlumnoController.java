@@ -16,6 +16,7 @@ import com.ada.cursos.model.DatosSE;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
+import com.ada.cursos.service.AlumnoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -27,7 +28,7 @@ public class AlumnoController {
 	private AlumnoRepository alumnoRepo;
 	
 	@Autowired
-	private UsuarioRepository usuarioRepo;
+	private AlumnoService alumnoServ;
 	
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
@@ -40,22 +41,9 @@ public class AlumnoController {
 		
 		log.info("metodo: altaAlumno.");
 		
-		Alumno alumno = new Alumno();
-		
-		java.util.Optional<Usuario> usuario = usuarioRepo.findById((long) alumnoForm.getId());
-		Usuario usuarioRespuesta = usuario.get();
-		
-		DatosSE datosSE = new DatosSE();
-		datosSE.setEstudia(alumnoForm.isEstudia());
-		datosSE.setTrabaja(alumnoForm.isTrabaja());
-		
-		alumno.setUsuario(usuarioRespuesta);		
-		alumno.setNombre(alumnoForm.getNombre());
-		alumno.setApellido(alumnoForm.getApellido());
-		alumno.setDatosSE(datosSE);
-		
-		
+		Alumno alumno = alumnoServ.generarAlumnoDeForm(alumnoForm);				
 		alumnoRepo.save(alumno);
+		
 		log.info("metodo: Alumno guardado.");
 
 		return new ResponseEntity<>(alumno, HttpStatus.CREATED);
