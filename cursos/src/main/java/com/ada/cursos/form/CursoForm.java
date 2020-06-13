@@ -2,16 +2,18 @@ package com.ada.cursos.form;
 
 public class CursoForm {
 	
-	private Long id;
 	private String nombre;
 	private int horas;
-	private Long EmpresaId;
-	public Long getId() {
-		return id;
+	private Long EmpId;
+	
+	
+	public Long getEmpId() {
+		return EmpId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setEmpId(Long empId) {
+		EmpId = empId;
 	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -23,12 +25,6 @@ public class CursoForm {
 	}
 	public void setHoras(int horas) {
 		this.horas = horas;
-	}
-	public Long getEmpresaId() {
-		return EmpresaId;
-	}
-	public void setEmpresaId(Long empresaId) {
-		EmpresaId = empresaId;
 	}
 
 	
