@@ -17,8 +17,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import javax.persistence.JoinColumn;
 
-
-@JsonAutoDetect (fieldVisibility = Visibility.ANY)
 @Entity
 @Table (name = "Alumno")
 
@@ -27,7 +25,7 @@ public class Alumno {
 	@Id
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn (name = "alumno_id")
     private Usuario usuario;

@@ -15,14 +15,14 @@ public class Rep {
 	@Id
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
     @MapsId
     private Usuario usuario;
 	
 	private String nombre;
 	private String apellido;
 	
-	@OneToOne(mappedBy = "rep")
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "rep")
     private Empresa empresa;
 	
 	

@@ -1,11 +1,15 @@
 package com.ada.cursos.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,12 +28,21 @@ public class Empresa {
 	private String nombre;
 	private String cuil;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "rep_id")
     private Rep rep;
 	
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="empresa")
+    private Set<Curso> cursos;
 	
 	
+	
+	public Set<Curso> getCursos() {
+		return cursos;
+	}
+	public void setCursos(Set<Curso> cursos) {
+		this.cursos = cursos;
+	}
 	public Rep getRep() {
 		return rep;
 	}

@@ -1,6 +1,7 @@
 package com.ada.cursos.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,11 +16,11 @@ public class Inscripcion {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alumno_id")
     private Alumno alumno;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 	
@@ -58,10 +59,6 @@ public class Inscripcion {
 	public void setSolicitaBeca(boolean solicitaBeca) {
 		this.solicitaBeca = solicitaBeca;
 	}
-	
-	
-	
-	
 
 
 }

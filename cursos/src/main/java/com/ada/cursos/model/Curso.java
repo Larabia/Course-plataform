@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +16,22 @@ public class Curso {
 	private Long id;
 	private String nombre;
 	private int horas;
+    @ManyToOne
+    @JoinColumn(name="emp_id", nullable=false)
+    private Empresa empresa;
+	
+	
+    
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
