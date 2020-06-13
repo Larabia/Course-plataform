@@ -25,6 +25,10 @@ public class RepService {
 		rep.setUsuario(usuario);
 		rep.setNombre(repForm.getNombre());
 		rep.setApellido(repForm.getApellido());
+		rep.setTipoDoc(repForm.getTipoDoc());
+		rep.setDoc(repForm.getDoc());
+		rep.setCargo(repForm.getCargo());
+		rep.setEmail(repForm.getEmail());
 		
 		return rep;
 

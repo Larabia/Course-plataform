@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class DateUtil {
 		
 		public static String PATTERN_D2_M2_Y4 = "yyyy-MM-dd";
