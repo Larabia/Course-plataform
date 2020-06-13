@@ -1,5 +1,6 @@
 package com.ada.cursos.model;
 
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -28,16 +29,39 @@ public class Alumno {
 	@OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn (name = "alumno_id")
-    private Usuario usuario;
-	
-	private String nombre;
-	
+    private Usuario usuario;		
+	private String nombre;	
 	private String apellido;
-	
+	private Date fechaNac;
+	private String genero;
+	private String dir;	
 	@Embedded
 	private DatosSE datosSE;
 	
-	
+
+	public Date getFechaNac() {
+		return fechaNac;
+	}
+
+	public void setFechaNac(Date fechaNac) {
+		this.fechaNac = fechaNac;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
+	public String getDir() {
+		return dir;
+	}
+
+	public void setDir(String dir) {
+		this.dir = dir;
+	}
 
 	public DatosSE getDatosSE() {
 		return datosSE;

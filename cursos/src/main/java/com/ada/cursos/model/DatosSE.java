@@ -11,7 +11,36 @@ public class DatosSE {
 	
 	private boolean estudia;
 	private boolean trabaja;
+	private boolean ingresos;
+	private float cantIngresos;
+	private boolean familia;
+	private int cantFamiliares;
 	
+	
+	public boolean isIngresos() {
+		return ingresos;
+	}
+	public void setIngresos(boolean ingresos) {
+		this.ingresos = ingresos;
+	}
+	public float getCantIngresos() {
+		return cantIngresos;
+	}
+	public void setCantIngresos(float cantIngresos) {
+		this.cantIngresos = cantIngresos;
+	}
+	public boolean isFamilia() {
+		return familia;
+	}
+	public void setFamilia(boolean familia) {
+		this.familia = familia;
+	}
+	public int getCantFamiliares() {
+		return cantFamiliares;
+	}
+	public void setCantFamiliares(int cantFamiliares) {
+		this.cantFamiliares = cantFamiliares;
+	}
 	public boolean isEstudia() {
 		return estudia;
 	}

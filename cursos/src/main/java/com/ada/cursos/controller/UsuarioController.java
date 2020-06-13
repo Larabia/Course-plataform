@@ -18,7 +18,7 @@ import com.ada.cursos.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(path = "/usuarioController")
+@RequestMapping(path = "/usuario")
 public class UsuarioController {
 	
 	@Autowired

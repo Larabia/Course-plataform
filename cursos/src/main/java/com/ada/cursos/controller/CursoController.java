@@ -19,7 +19,7 @@ import com.ada.cursos.service.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(path = "/cursoController")
+@RequestMapping(path = "/curso")
 public class CursoController {
 
 	@Autowired
