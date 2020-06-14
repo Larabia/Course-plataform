@@ -30,18 +30,49 @@ public class Empresa {
 	
 	private String nombre;
 	private String cuil;
-	
-	
+	private String tipo;
+	private String dir;
+	private String categoria;
+	private String añoFun;
+	private String tel;
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "rep_id")
-    private Rep rep;
-	
+    private Rep rep;	
 	@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy="empresa")
     private Set<Curso> cursos;
 	
 	
-	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public String getDir() {
+		return dir;
+	}
+	public void setDir(String dir) {
+		this.dir = dir;
+	}
+	public String getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+	public String getAñoFun() {
+		return añoFun;
+	}
+	public void setAñoFun(String añoFun) {
+		this.añoFun = añoFun;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 	public Set<Curso> getCursos() {
 		return cursos;
 	}

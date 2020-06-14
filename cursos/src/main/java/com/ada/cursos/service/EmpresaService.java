@@ -24,7 +24,11 @@ public class EmpresaService {
 
 		empresa.setNombre(empresaForm.getNombre());
 		empresa.setCuil(empresaForm.getCuil());
-		
+		empresa.setTipo(empresaForm.getTipo());
+		empresa.setDir(empresaForm.getDir());
+		empresa.setCategoria(empresaForm.getCategoria());
+		empresa.setAñoFun(empresaForm.getAñoFun());
+		empresa.setTel(empresaForm.getTel());		
 		empresa.setRep(rep);
 		
 		return empresa;
