@@ -24,6 +24,11 @@ public class CursoService {
 		
 		curso.setNombre(cursoForm.getNombre());
 		curso.setHoras(cursoForm.getHoras());
+		curso.setModalidad(cursoForm.getModalidad());
+		curso.setPrecio(cursoForm.getPrecio());
+		curso.setCategoria(cursoForm.getCategoria());
+		curso.setCupo(cursoForm.getCupo());
+		curso.setCupoBecas(cursoForm.getCupoBecas());
 		curso.setEmpresa(empresa);
 		
 		return curso;
