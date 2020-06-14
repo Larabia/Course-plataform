@@ -7,8 +7,6 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -17,19 +15,43 @@ public class Rep {
 	
 	@Id
 	private Long id;
-	
 	@OneToOne(fetch = FetchType.EAGER)
     @MapsId
     private Usuario usuario;
-	
 	private String nombre;
 	private String apellido;
-	
+	private String tipoDoc;
+	private String doc;
+	private String cargo;
+	private String email;	
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "rep")
     private Empresa empresa;
 	
-	
-	
+		
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
+	}
+	public String getDoc() {
+		return doc;
+	}
+	public void setDoc(String doc) {
+		this.doc = doc;
+	}
+	public String getCargo() {
+		return cargo;
+	}
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -59,9 +81,6 @@ public class Rep {
 	}
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
-	}
-	
-	
-	
+	}			
 
 }

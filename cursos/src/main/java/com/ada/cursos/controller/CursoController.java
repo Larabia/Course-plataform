@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.repository.CursoRepository;
-import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.service.CursoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(path = "/cursoController")
+@RequestMapping(path = "/curso")
 public class CursoController {
 
 	@Autowired

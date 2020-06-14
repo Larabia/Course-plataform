@@ -1,7 +1,7 @@
 # Course-plataform
 ADA ITW Bootcamp final project. This Api Rest service manage scholarships and study quotas for courses in different categories.
 
-_This proyect is coded in java with frameworks: Maven, Hibernate and SpringBoot. This API uses a SQL database and provides the methods for a e-learning page.I use JUNIT for unitary tests.  _
+_This proyect is coded in java with frameworks: Maven, Hibernate and SpringBoot. This API uses a SQL database and provides the methods for an e-learning page.I use JUNIT for unitary tests.  _
 
 ## In Progress 🚀
 
