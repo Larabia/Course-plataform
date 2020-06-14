@@ -1,31 +1,59 @@
 package com.ada.cursos.form;
 
+
 public class InscripcionForm {
 	
-	private Long alumnoId;
+	//Tipo de inscripcion
+	private boolean conBeca;
+	private String porcentBeca;
+	
+	//Datos del curso
 	private Long cursoId;
 	private boolean finalizado;
 	
-	
-	
-	public boolean isFinalizado() {
-		return finalizado;
+	//Datos del alumno
+	private Long alumnoId;
+
+	public boolean isConBeca() {
+		return conBeca;
 	}
-	public void setFinalizado(boolean finalizado) {
-		this.finalizado = finalizado;
+
+	public void setConBeca(boolean conBeca) {
+		this.conBeca = conBeca;
 	}
-	public Long getAlumnoId() {
-		return alumnoId;
+
+	public String getPorcentBeca() {
+		return porcentBeca;
 	}
-	public void setAlumnoId(Long alumnoId) {
-		this.alumnoId = alumnoId;
+
+	public void setPorcentBeca(String porcentBeca) {
+		this.porcentBeca = porcentBeca;
 	}
+
 	public Long getCursoId() {
 		return cursoId;
 	}
+
 	public void setCursoId(Long cursoId) {
 		this.cursoId = cursoId;
 	}
-	
 
+	public boolean isFinalizado() {
+		return finalizado;
+	}
+
+	public void setFinalizado(boolean finalizado) {
+		this.finalizado = finalizado;
+	}
+
+	public Long getAlumnoId() {
+		return alumnoId;
+	}
+
+	public void setAlumnoId(Long alumnoId) {
+		this.alumnoId = alumnoId;
+	}
+	
+	
+	
 }

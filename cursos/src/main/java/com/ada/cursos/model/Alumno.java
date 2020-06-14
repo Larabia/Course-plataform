@@ -1,21 +1,14 @@
 package com.ada.cursos.model;
 
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -35,7 +28,8 @@ public class Alumno {
 	private Date fechaNac;
 	private String genero;
 	private String dir;	
-	@Embedded
+	@Embedded 
+	@Column(nullable = true)
 	private DatosSE datosSE;
 	
 

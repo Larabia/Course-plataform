@@ -24,19 +24,19 @@ public class InscripcionService {
 	@Autowired
 	CursoRepository cursoRepo;
 	
-	public Inscripcion generarInscripcionDeForm (InscripcionForm inscripcionForm) {
+	public Inscripcion generarInscripcionDeForm (InscripcionForm inscripcionBform) {
 		
 		Inscripcion inscripcion = new Inscripcion();
 		
-		java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(inscripcionForm.getAlumnoId());
+		java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(inscripcionBform.getAlumnoId());
 		Alumno alumno = alumnoOp.get();
 		
-		java.util.Optional<Curso> cursoOp = cursoRepo.findById(inscripcionForm.getCursoId());
+		java.util.Optional<Curso> cursoOp = cursoRepo.findById(inscripcionBform.getCursoId());
 		Curso curso = cursoOp.get();
 		
 		inscripcion.setAlumno(alumno);
 		inscripcion.setCurso(curso);
-		inscripcion.setFinalizado(inscripcionForm.isFinalizado());
+		inscripcion.setFinalizado(inscripcionBform.isFinalizado());
 		
 		return inscripcion;
 	

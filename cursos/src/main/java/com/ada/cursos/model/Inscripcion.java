@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -18,20 +17,39 @@ public class Inscripcion {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-
+	//Tipo de inscripcion
+	private boolean conBeca;
+	private String porcentBeca;
+	
+	//Datos del curso	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "curso_id")
+	private Curso curso;	
+	private boolean finalizado;
+	
+	//Datos del alumno
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alumno_id")
     private Alumno alumno;
-	
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "curso_id")
-	private Curso curso;
-	
-	private boolean finalizado;
 
 	
 	
+	public boolean isConBeca() {
+		return conBeca;
+	}
+
+	public void setConBeca(boolean conBeca) {
+		this.conBeca = conBeca;
+	}
+
+	public String getPorcentBeca() {
+		return porcentBeca;
+	}
+
+	public void setPorcentBeca(String porcentBeca) {
+		this.porcentBeca = porcentBeca;
+	}
+
 	public boolean isFinalizado() {
 		return finalizado;
 	}

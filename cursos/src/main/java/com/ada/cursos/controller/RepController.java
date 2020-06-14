@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.RepForm;
 import com.ada.cursos.model.Rep;
-import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.RepRepository;
-import com.ada.cursos.repository.UsuarioRepository;
 import com.ada.cursos.service.RepService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +25,6 @@ public class RepController {
 
 	@Autowired
 	private RepRepository repRepo;
-	
-	@Autowired
-	private UsuarioRepository usuarioRepo;
 	
 	@Autowired
 	private RepService repServ;
