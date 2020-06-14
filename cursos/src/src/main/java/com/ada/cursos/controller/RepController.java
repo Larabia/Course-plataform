@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.RepForm;
 import com.ada.cursos.model.Rep;
-import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.RepRepository;
-import com.ada.cursos.repository.UsuarioRepository;
+import com.ada.cursos.service.RepService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -28,7 +27,7 @@ public class RepController {
 	private RepRepository repRepo;
 	
 	@Autowired
-	private UsuarioRepository usuarioRepo;
+	private RepService repServ;
 	
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
@@ -41,16 +40,9 @@ public class RepController {
 		
 		log.info("metodo: altaRep.");
 		
-		Rep rep = new Rep();
-		
-		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(repForm.getId());
-		Usuario usuario = usuarioOp.get();
-		
-		rep.setUsuario(usuario);		
-		rep.setNombre(repForm.getNombre());
-		rep.setApellido(repForm.getApellido());	
-		
+		Rep rep = repServ.generarRepDeForm(repForm);		
 		repRepo.save(rep);
+	
 		log.info("metodo: rep guardado.");
 
 		return new ResponseEntity<>(rep, HttpStatus.CREATED);

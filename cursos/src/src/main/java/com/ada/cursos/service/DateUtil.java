@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DateUtil {
 		
-		public static String PATTERN_D2_M2_Y4 = "yyyy-MM-dd";
+		public static String PATTERN_Y4_M2_D2 = "yyyy-MM-dd";
 		public static String PATTERN_D2_M2_Y4_H_m2 = "dd/MM/yyyy H:mm";
 
 		public static String formatSdf(String pattern, Date date) {
