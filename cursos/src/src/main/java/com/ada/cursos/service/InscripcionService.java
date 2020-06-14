@@ -36,10 +36,9 @@ public class InscripcionService {
 		
 		inscripcion.setAlumno(alumno);
 		inscripcion.setCurso(curso);
-		inscripcion.setFinalizado(inscripcionForm.isFinalizado());
+		inscripcion.setSolicitaBeca(inscripcionForm.isSolicitaBeca());
 		
 		return inscripcion;
-	
 	}
 
 }

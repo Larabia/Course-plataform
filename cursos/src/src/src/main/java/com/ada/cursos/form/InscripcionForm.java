@@ -4,16 +4,9 @@ public class InscripcionForm {
 	
 	private Long alumnoId;
 	private Long cursoId;
-	private boolean finalizado;
+	private boolean solicitaBeca;
 	
 	
-	
-	public boolean isFinalizado() {
-		return finalizado;
-	}
-	public void setFinalizado(boolean finalizado) {
-		this.finalizado = finalizado;
-	}
 	public Long getAlumnoId() {
 		return alumnoId;
 	}
@@ -26,6 +19,13 @@ public class InscripcionForm {
 	public void setCursoId(Long cursoId) {
 		this.cursoId = cursoId;
 	}
+	public boolean isSolicitaBeca() {
+		return solicitaBeca;
+	}
+	public void setSolicitaBeca(boolean solicitaBeca) {
+		this.solicitaBeca = solicitaBeca;
+	}
+	
 	
 
 }

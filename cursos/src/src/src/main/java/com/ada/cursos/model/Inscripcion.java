@@ -1,14 +1,11 @@
 package com.ada.cursos.model;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -18,28 +15,18 @@ public class Inscripcion {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
     @JoinColumn(name = "alumno_id")
     private Alumno alumno;
-	
-	
-	@ManyToOne(fetch = FetchType.EAGER)
+
+	@ManyToOne
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 	
-	private boolean finalizado;
+	private boolean solicitaBeca;
 
 	
 	
-	public boolean isFinalizado() {
-		return finalizado;
-	}
-
-	public void setFinalizado(boolean finalizado) {
-		this.finalizado = finalizado;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -64,7 +51,17 @@ public class Inscripcion {
 		this.curso = curso;
 	}
 
+	public boolean isSolicitaBeca() {
+		return solicitaBeca;
+	}
 
+	public void setSolicitaBeca(boolean solicitaBeca) {
+		this.solicitaBeca = solicitaBeca;
+	}
+	
+	
+	
+	
 
 
 }

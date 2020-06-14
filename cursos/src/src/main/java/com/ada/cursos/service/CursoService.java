@@ -29,7 +29,6 @@ public class CursoService {
 		curso.setCategoria(cursoForm.getCategoria());
 		curso.setCupo(cursoForm.getCupo());
 		curso.setCupoBecas(cursoForm.getCupoBecas());
-		curso.setAbierto(cursoForm.isAbierto());
 		curso.setEmpresa(empresa);
 		
 		return curso;
