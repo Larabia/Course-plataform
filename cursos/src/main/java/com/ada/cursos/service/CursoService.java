@@ -43,7 +43,7 @@ public class CursoService {
 
 	}
 
-	public Curso generarCursoDeForm(CursoForm cursoForm, Curso curso) {
+	public Curso cargarDatosForm(CursoForm cursoForm, Curso curso) {
 		
 		Empresa empresa = empService.porId(cursoForm.getEmpId());
 
