@@ -1,7 +1,8 @@
 package com.ada.cursos.model;
 
 import javax.persistence.Embeddable;
-
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 //esta clase representa los datos socio-economicos del alumno
 
@@ -10,38 +11,7 @@ public class DatosSE {
 	
 	private boolean estudia;
 	private boolean trabaja;
-	private boolean ingresos;
-	private String cantIngresos;
-	private boolean familia;
-	private String cantFamiliares;
 	
-	
-	public String getCantIngresos() {
-		return cantIngresos;
-	}
-	public void setCantIngresos(String cantIngresos) {
-		this.cantIngresos = cantIngresos;
-	}
-	public String getCantFamiliares() {
-		return cantFamiliares;
-	}
-	public void setCantFamiliares(String cantFamiliares) {
-		this.cantFamiliares = cantFamiliares;
-	}
-	public boolean isIngresos() {
-		return ingresos;
-	}
-	public void setIngresos(boolean ingresos) {
-		this.ingresos = ingresos;
-	}
-
-	public boolean isFamilia() {
-		return familia;
-	}
-	public void setFamilia(boolean familia) {
-		this.familia = familia;
-	}
-
 	public boolean isEstudia() {
 		return estudia;
 	}

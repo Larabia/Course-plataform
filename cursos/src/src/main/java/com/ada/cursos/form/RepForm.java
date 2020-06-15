@@ -5,36 +5,6 @@ public class RepForm {
 	private Long id;
 	private String nombre;
 	private String apellido;
-	private String tipoDoc;
-	private String doc;
-	private String cargo;
-	private String email;	
-	
-	
-	public String getTipoDoc() {
-		return tipoDoc;
-	}
-	public void setTipoDoc(String tipoDoc) {
-		this.tipoDoc = tipoDoc;
-	}
-	public String getDoc() {
-		return doc;
-	}
-	public void setDoc(String doc) {
-		this.doc = doc;
-	}
-	public String getCargo() {
-		return cargo;
-	}
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
 	public Long getId() {
 		return id;
 	}

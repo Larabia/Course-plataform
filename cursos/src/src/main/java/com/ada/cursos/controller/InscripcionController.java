@@ -3,6 +3,7 @@ package com.ada.cursos.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,19 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.ada.cursos.form.InscripcionForm;
+import com.ada.cursos.model.Alumno;
+import com.ada.cursos.model.Curso;
+import com.ada.cursos.model.DatosSE;
 import com.ada.cursos.model.Inscripcion;
+import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.repository.UsuarioRepository;
-import com.ada.cursos.service.InscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 
 
 @RestController
-@RequestMapping(path = "/inscripcion")
+@RequestMapping(path = "/inscripcionController")
 public class InscripcionController {
 	
 	@Autowired
@@ -40,9 +44,6 @@ public class InscripcionController {
 	@Autowired
 	InscripcionRepository inscripcionRepo;
 	
-	@Autowired
-	InscripcionService inscripcionServ;
-	
 	Log log = LogFactory.getLog(InscripcionController.class);
 	
 	// POST
@@ -50,13 +51,23 @@ public class InscripcionController {
 		@PostMapping(path = "/alta")
 		@Operation (summary = "Alta Inscripcion", description = "Ingrasa un objeto Inscripcion a la base de datos")
 		
-		public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionBform) {	
+		public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionForm) {	
 			
 			log.info("metodo: altaInscripcion.");
 			
-			Inscripcion inscripcion = inscripcionServ.generarInscripcionDeForm(inscripcionBform);
-			inscripcionRepo.save(inscripcion);
+			Inscripcion inscripcion = new Inscripcion();
 			
+			java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(inscripcionForm.getAlumnoId());
+			Alumno alumno = alumnoOp.get();
+			
+			java.util.Optional<Curso> cursoOp = cursoRepo.findById(inscripcionForm.getCursoId());
+			Curso curso = cursoOp.get();
+			
+			inscripcion.setAlumno(alumno);
+			inscripcion.setCurso(curso);
+			inscripcion.setSolicitaBeca(inscripcionForm.isSolicitaBeca());
+			
+			inscripcionRepo.save(inscripcion);
 			log.info("metodo: Inscripcion guardada.");
 
 			return new ResponseEntity<>(inscripcion, HttpStatus.CREATED);

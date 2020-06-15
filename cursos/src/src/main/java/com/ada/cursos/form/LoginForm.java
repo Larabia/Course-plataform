@@ -4,7 +4,6 @@ public class LoginForm {
 	
 	private String email;
 	private String pass;
-	
 	public String getEmail() {
 		return email;
 	}

@@ -1,5 +1,6 @@
 package com.ada.cursos.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -38,9 +39,16 @@ public class Empresa {
     private Rep rep;	
 	@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy="empresa")
-    private Set<Curso> cursos;
+    private List<Curso> cursos;
 	
 	
+	
+	public List<Curso> getCursos() {
+		return cursos;
+	}
+	public void setCursos(List<Curso> cursos) {
+		this.cursos = cursos;
+	}
 	public String getTipo() {
 		return tipo;
 	}
@@ -71,12 +79,7 @@ public class Empresa {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
-	public Set<Curso> getCursos() {
-		return cursos;
-	}
-	public void setCursos(Set<Curso> cursos) {
-		this.cursos = cursos;
-	}
+
 	public Rep getRep() {
 		return rep;
 	}

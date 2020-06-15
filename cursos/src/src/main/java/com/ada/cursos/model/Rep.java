@@ -8,56 +8,21 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
-
 @Entity
 @Table (name = "Rep")
 public class Rep {
 	
 	@Id
 	private Long id;
-	@OneToOne(fetch = FetchType.EAGER)
+	
+	@OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private Usuario usuario;
+	
 	private String nombre;
 	private String apellido;
-	private String tipoDoc;
-	private String doc;
-	private String cargo;
-	private String email;	
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "rep")
-    private Empresa empresa;
 	
-		
-	public String getTipoDoc() {
-		return tipoDoc;
-	}
-	public void setTipoDoc(String tipoDoc) {
-		this.tipoDoc = tipoDoc;
-	}
-	public String getDoc() {
-		return doc;
-	}
-	public void setDoc(String doc) {
-		this.doc = doc;
-	}
-	public String getCargo() {
-		return cargo;
-	}
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -81,6 +46,9 @@ public class Rep {
 	}
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
-	}			
+	}
+	
+	
+	
 
 }

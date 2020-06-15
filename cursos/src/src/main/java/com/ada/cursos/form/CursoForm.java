@@ -10,15 +10,8 @@ public class CursoForm {
 	private int cupo;
 	private int cupoBecas;
 	private Long EmpId;
-	private boolean abierto;
 	
 	
-	public boolean isAbierto() {
-		return abierto;
-	}
-	public void setAbierto(boolean abierto) {
-		this.abierto = abierto;
-	}
 	public String getModalidad() {
 		return modalidad;
 	}

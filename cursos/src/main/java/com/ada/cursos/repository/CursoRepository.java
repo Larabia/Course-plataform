@@ -9,4 +9,6 @@ import com.ada.cursos.model.Curso;
 public interface CursoRepository extends CrudRepository<Curso, Long> {
 		
 	public List<Curso> findByAbiertoTrue();
+	
+	public List<Curso> findByCategoriaStartingWith(String categoria);
 }

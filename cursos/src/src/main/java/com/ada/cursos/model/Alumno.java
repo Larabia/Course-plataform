@@ -1,16 +1,24 @@
 package com.ada.cursos.model;
 
-import java.util.Date;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
 import javax.persistence.JoinColumn;
 
+
+@JsonAutoDetect (fieldVisibility = Visibility.ANY)
 @Entity
 @Table (name = "Alumno")
 
@@ -19,43 +27,19 @@ public class Alumno {
 	@Id
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn (name = "alumno_id")
-    private Usuario usuario;		
-	private String nombre;	
+    private Usuario usuario;
+	
+	private String nombre;
+	
 	private String apellido;
-	private Date fechaNac;
-	private String genero;
-	private String dir;	
-	@Embedded 
-	@Column(nullable = true)
+	
+	@Embedded
 	private DatosSE datosSE;
 	
-
-	public Date getFechaNac() {
-		return fechaNac;
-	}
-
-	public void setFechaNac(Date fechaNac) {
-		this.fechaNac = fechaNac;
-	}
-
-	public String getGenero() {
-		return genero;
-	}
-
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
-
-	public String getDir() {
-		return dir;
-	}
-
-	public void setDir(String dir) {
-		this.dir = dir;
-	}
+	
 
 	public DatosSE getDatosSE() {
 		return datosSE;

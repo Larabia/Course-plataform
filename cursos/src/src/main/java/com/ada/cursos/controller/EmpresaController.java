@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.EmpresaForm;
 import com.ada.cursos.model.Empresa;
+import com.ada.cursos.model.Rep;
+
 
 import com.ada.cursos.repository.EmpresaRepository;
+import com.ada.cursos.repository.RepRepository;
 import com.ada.cursos.service.EmpresaService;
 
 import io.swagger.v3.oas.annotations.Operation;
