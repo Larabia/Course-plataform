@@ -10,7 +10,6 @@ import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.DatosSE;
 import com.ada.cursos.model.Usuario;
-import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 
 @Service
@@ -18,44 +17,37 @@ public class AlumnoService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepo;
-	
-	@Autowired
-	private AlumnoRepository alumnoRepo;
 
 	@Autowired
 	private DateUtil dateUtil;
 
-	@Autowired
-	private DatosSEUtil datosSEUtil;
-	
-    public Alumno porId(Long id) {
-		
-		java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
-		Alumno alumno = alumnoOp.get();
-		
-		return alumno;
-	}
-
-	public Alumno altaAlumno(AlumnoForm alumnoForm) {
+	public Alumno generarAlumnoDeForm(AlumnoForm alumnoForm) {
 
 		Alumno alumno = new Alumno();
 
-		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(alumnoForm.getId());
-		Usuario usuario = usuarioOp.get();
+		java.util.Optional<Usuario> usuario = usuarioRepo.findById(alumnoForm.getId());
+		Usuario usuarioRespuesta = usuario.get();
 
-		DatosSE datosSE = datosSEUtil.nuevoDatosSE(alumnoForm);
-
+		DatosSE datosSE = new DatosSE();
+		datosSE.setEstudia(alumnoForm.isEstudia());
+		datosSE.setTrabaja(alumnoForm.isTrabaja());
+		datosSE.setIngresos(alumnoForm.isIngresos());
+		datosSE.setCantIngresos(alumnoForm.getCantIngresos());
+		datosSE.setFamilia(alumnoForm.isFamilia());
+		datosSE.setCantFamiliares(alumnoForm.getCantFamiliares());
+		
+		
 		try {
-			Date fechaNac = DateUtil.formatParse(dateUtil.PATTERN_Y4_M2_D2, alumnoForm.getFechaNac());
+			Date fechaNac = DateUtil.formatParse(dateUtil.PATTERN_D2_M2_Y4, alumnoForm.getFechaNac());
 			alumno.setFechaNac(fechaNac);
 		} catch (ParseException e) {
-			System.out.println("El formato de fecha ingresado es incorrecto.");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}		
 
-		alumno.setUsuario(usuario);
+		alumno.setUsuario(usuarioRespuesta);
 		alumno.setNombre(alumnoForm.getNombre());
-		alumno.setApellido(alumnoForm.getApellido());
+		alumno.setApellido(alumnoForm.getApellido());		
 		alumno.setGenero(alumnoForm.getGenero());
 		alumno.setDir(alumnoForm.getDir());
 		alumno.setDatosSE(datosSE);
@@ -63,5 +55,4 @@ public class AlumnoService {
 		return alumno;
 
 	}
-
 }
