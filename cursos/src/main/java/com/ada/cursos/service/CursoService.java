@@ -1,5 +1,8 @@
 package com.ada.cursos.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -56,6 +59,21 @@ public class CursoService {
 
 		return curso;
 
+	}
+	
+	public List<Curso> filtrarPorCategoria(List<Curso> cursosPorEmp, String categoria) {
+		
+		List<Curso> cursosPorEmpYcat = new ArrayList<Curso>();
+		Iterator<Curso> filtrarPorCat = cursosPorEmp.iterator();
+		
+		while (filtrarPorCat.hasNext()) {
+			Curso curso = filtrarPorCat.next();
+		    if( categoria.equals(curso.getCategoria())) {
+		    	cursosPorEmpYcat.add(curso);              
+		    }
+		}
+			
+		return cursosPorEmpYcat;
 	}
 
 }
