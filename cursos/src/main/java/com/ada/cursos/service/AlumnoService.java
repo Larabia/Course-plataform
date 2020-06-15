@@ -10,6 +10,7 @@ import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.DatosSE;
 import com.ada.cursos.model.Usuario;
+import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 
 @Service
@@ -17,12 +18,23 @@ public class AlumnoService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepo;
+	
+	@Autowired
+	private AlumnoRepository alumnoRepo;
 
 	@Autowired
 	private DateUtil dateUtil;
 
 	@Autowired
 	private DatosSEUtil datosSEUtil;
+	
+    public Alumno porId(Long id) {
+		
+		java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
+		Alumno alumno = alumnoOp.get();
+		
+		return alumno;
+	}
 
 	public Alumno altaAlumno(AlumnoForm alumnoForm) {
 

@@ -40,17 +40,6 @@ public class CursoController {
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
 	
-	@GetMapping(path = "/id")
-	@Operation(summary = "cursoPorId", description = "Busca un curso por id")
-    public ResponseEntity<Curso> cursoPorId(Long id) {
-		
-		log.info("buscando curso...");
-		
-		java.util.Optional<Curso> cursoOp = cursoRepo.findById(id);
-		Curso curso = cursoOp.get();
-		
-		return new ResponseEntity<>(curso, HttpStatus.OK);
-	}
 	
 	@GetMapping(path = "/listado")
 	@Operation(summary = "ListarCursos", description = "Trae una lista de cursos en la base")

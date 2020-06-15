@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.ada.cursos.form.EmpresaForm;
 import com.ada.cursos.model.Empresa;
 import com.ada.cursos.model.Rep;
+import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.repository.RepRepository;
 
 
@@ -14,6 +15,18 @@ public class EmpresaService {
 	
 	@Autowired
 	private RepRepository repRepo;
+	
+	@Autowired
+	private EmpresaRepository empresaRepo;
+	
+   
+	public Empresa porId(Long id) {
+		
+		java.util.Optional<Empresa> empresaOp = empresaRepo.findById(id);
+		Empresa empresa = empresaOp.get();
+		
+		return empresa;
+	}
 	
 	public Empresa generarEmpresaDeForm(EmpresaForm empresaForm) {
 
