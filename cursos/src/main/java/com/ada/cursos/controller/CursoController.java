@@ -20,7 +20,6 @@ import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
 import com.ada.cursos.repository.CursoRepository;
-import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.service.CursoService;
 import com.ada.cursos.service.EmpresaService;
 import com.google.common.collect.Lists;
@@ -36,14 +35,12 @@ public class CursoController {
 
 	@Autowired
 	private CursoService cursoServ;
-
-	@Autowired
-	private EmpresaRepository empRepo;
 	
 	@Autowired
 	private EmpresaService empServ;
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
+	
 	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "cursoPorId", description = "Recibe como un Long id y devuelve el Curso con el id correspondiente.")
@@ -51,7 +48,8 @@ public class CursoController {
 
 		log.info("Metodo cursoPorId: buscando curso id"+id);
 		Curso curso = cursoServ.porId(id);		
-
+		
+		log.info("Curso encontrado");
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 	}
 
@@ -60,11 +58,11 @@ public class CursoController {
 	public ResponseEntity<List<Curso>> listarCursos() {
 
 		log.info("Metodo listarCursos: listando cursos...");
-
 		Iterable<Curso> ListCurIt = cursoRepo.findAll();
-		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
+		List<Curso> listadoCursos = Lists.newArrayList(ListCurIt);
 
-		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
+		log.info("Listado completo: listadoCursos.");
+		return new ResponseEntity<>(listadoCursos, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/listado-abiertos")
@@ -72,10 +70,10 @@ public class CursoController {
 	public ResponseEntity<List<Curso>> listarAbiertos() {
 
 		log.info("Metodo listarAbiertos: listando cursos abiertos...");
-
 		Iterable<Curso> ListCurIt = cursoRepo.findByAbiertoTrue();
 		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
 
+		log.info("Listado completo: cursosAbiertos.");
 		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
 	}
 
@@ -84,15 +82,15 @@ public class CursoController {
 	public ResponseEntity<List<Curso>> listarPorCategoria(@RequestParam String categoria) {
 
 		log.info("Metodo listarPorCategoria: listando cursos de la categoria " + categoria + "...");
-
 		Iterable<Curso> ListCurIt = cursoRepo.findByCategoriaStartingWith(categoria);
-		List<Curso> cursos = Lists.newArrayList(ListCurIt);
-
-		return new ResponseEntity<>(cursos, HttpStatus.OK);
+		List<Curso> cursosPorCat = Lists.newArrayList(ListCurIt);
+		
+		log.info("Listado completo: cursosPorCat.");
+		return new ResponseEntity<>(cursosPorCat, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/listado-por-empresa")
-	@Operation(summary = "ListarPorEmpresa", description = "Trae una lista de cursos por empresa")
+	@Operation(summary = "listarPorEmpresa", description = "Trae una lista de cursos por empresa")
 	public ResponseEntity<List<Curso>> listarPorEmpresa(@RequestParam Long id) {
 
 		log.info("Metodo listarPorEmpresa: buscando empresa id" + id);
@@ -101,12 +99,13 @@ public class CursoController {
 		log.info("listando cursos...");
 		Iterable<Curso> ListCurIt = empresa.getCursos();
 		List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
+		
 		log.info("Listado completo: cursosPorEmp");
 		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
 	}
 	
 	@GetMapping(path = "/listado-por-empresa-y-categoria")
-	@Operation(summary = "listarPorEmpresaYcategoria", description = "Trae una lista de cursos por empresa")
+	@Operation(summary = "listarPorEmpresaYcategoria", description = "Trae una lista de cursos por empresa y la filtra por categoria")
 	public ResponseEntity<List<Curso>> listarPorEmpresaYcategoria(@RequestParam Long id, @RequestParam String categoria) {
 
 		log.info("Metodo listarPorEmpresaYcategoria: buscando empresa id" + id);
@@ -131,7 +130,7 @@ public class CursoController {
 		log.info("Metodo altaCurso: creando curso...");
 
 		Curso curso = new Curso();
-		curso = cursoServ.generarCursoDeForm(cursoForm, curso);
+		curso = cursoServ.cargarDatosForm(cursoForm, curso);
 		cursoRepo.save(curso);
 
 		log.info("Curso guardado.");
@@ -141,14 +140,14 @@ public class CursoController {
 	}
 
 	@PutMapping(path = "/update/{id}")
-	@Operation(summary = "updateCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
-	public ResponseEntity<Curso> updateCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
-		log.info("Metodo updateCurso: buscando curso...");
-
-		Curso curso = cursoServ.porId(id);
-		log.info("Modificando curso...");
+	@Operation(summary = "modificarCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
+	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
 		
-		curso = cursoServ.generarCursoDeForm(cursoForm, curso);
+		log.info("Metodo updateCurso: buscando curso...");
+		Curso curso = cursoServ.porId(id);
+		
+		log.info("Modificando curso...");
+		curso = cursoServ.cargarDatosForm(cursoForm, curso);
 		cursoRepo.save(curso);
 		
 		log.info("Curso modificado.");
