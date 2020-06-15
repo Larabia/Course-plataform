@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
+import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.service.CursoService;
@@ -39,6 +40,30 @@ public class CursoController {
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
 	
+	@GetMapping(path = "/id")
+	@Operation(summary = "cursoPorId", description = "Busca un curso por id")
+    public ResponseEntity<Curso> cursoPorId(Long id) {
+		
+		log.info("buscando curso...");
+		
+		java.util.Optional<Curso> cursoOp = cursoRepo.findById(id);
+		Curso curso = cursoOp.get();
+		
+		return new ResponseEntity<>(curso, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/listado")
+	@Operation(summary = "ListarCursos", description = "Trae una lista de cursos en la base")
+    public ResponseEntity<List<Curso>> listarCursos() {
+		
+		log.info("comienzo invocacion listar cursos...");
+		
+		Iterable<Curso> ListCurIt = cursoRepo.findAll();
+		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
+		
+		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
+	}
+	
 	@GetMapping(path = "/listado-abiertos")
 	@Operation(summary = "ListarAbiertos", description = "Trae una lista de cursos abiertos")
     public ResponseEntity<List<Curso>> listarAbiertos() {
@@ -51,6 +76,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
 	}
 	
+	
 	@GetMapping(path = "/listado-por-categoria")
 	@Operation(summary = "ListarPorCategoria", description = "Trae una lista de cursos por categoria")
     public ResponseEntity<List<Curso>> listarPorCategoria(@RequestParam String categoria) {
@@ -62,6 +88,7 @@ public class CursoController {
 		
 		return new ResponseEntity<>(cursos, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping(path = "/listado-por-empresa")
 	@Operation(summary = "ListarPorEmpresa", description = "Trae una lista de cursos por empresa")
@@ -77,6 +104,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
 	}
 
+	
 	@PostMapping(path = "/alta")
 	@Operation(summary = "Alta curso", description = "Ingrasa un objeto curso a la base de datos")
 

@@ -1,6 +1,8 @@
 package com.ada.cursos.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ada.cursos.form.CursoForm;
@@ -15,6 +17,17 @@ public class CursoService {
 	
 	@Autowired
 	private EmpresaRepository empRepo;
+	
+	@Autowired
+	private CursoRepository cursoRepo;
+	
+    public Curso cursoPorId(Long id) {
+				
+		java.util.Optional<Curso> cursoOp = cursoRepo.findById(id);
+		Curso curso = cursoOp.get();
+		
+		return curso;
+	}
 	
 	
 	public Curso generarCursoDeForm (CursoForm cursoForm) {
