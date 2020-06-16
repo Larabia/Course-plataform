@@ -1,11 +1,15 @@
 package com.ada.cursos.service;
 
+import java.util.Optional;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ada.cursos.form.RepForm;
 import com.ada.cursos.model.Rep;
 import com.ada.cursos.model.Usuario;
+import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.RepRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 
@@ -19,20 +23,25 @@ public class RepService {
 	@Autowired
 	private RepRepository repRepo;
 	
+	Logger log = Logger.getLogger(CursoRepository.class.getName());
+	
 	
 	public Rep porId(Long id) {
 		
-		java.util.Optional<Rep> repOp = repRepo.findById(id);
+		Optional<Rep> repOp = repRepo.findById(id);
+		
+		if (Optional.empty().equals(repOp)) {
+			log.info("El id ingresado no existe.");
+		}
+		
 		Rep rep = repOp.get();
 		
 		return rep;
 	}
 
-	public Rep generarRepDeForm(RepForm repForm) {
+	public Rep cargarDatosForm(RepForm repForm, Rep rep) {
 
-		Rep rep = new Rep();
-
-		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(repForm.getId());
+		Optional<Usuario> usuarioOp = usuarioRepo.findById(repForm.getId());
 		Usuario usuario = usuarioOp.get();
 
 		rep.setUsuario(usuario);

@@ -56,7 +56,7 @@ public class EmpresaController {
 		Iterable<Empresa> ListEmpIt = empresaRepo.findAll();
 		List<Empresa> listadoEmpresas = Lists.newArrayList(ListEmpIt);
 
-		log.info("Listado completo: listadoCursos.");
+		log.info("Listado completo: listadoEmpresas.");
 		return new ResponseEntity<>(listadoEmpresas, HttpStatus.OK);
 	}
 
