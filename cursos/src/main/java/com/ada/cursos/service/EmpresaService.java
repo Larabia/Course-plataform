@@ -39,9 +39,7 @@ public class EmpresaService {
 		return empresa;
 	}
 	
-	public Empresa generarEmpresaDeForm(EmpresaForm empresaForm) {
-
-		Empresa empresa = new Empresa();
+	public Empresa cargarDatosForm(EmpresaForm empresaForm, Empresa empresa) {
 
 		java.util.Optional<Rep> repOp = repRepo.findById(empresaForm.getRepId());
 		Rep rep = repOp.get();
