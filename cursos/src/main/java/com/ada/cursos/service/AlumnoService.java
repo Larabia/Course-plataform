@@ -2,6 +2,8 @@ package com.ada.cursos.service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.DatosSE;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
+import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 
 @Service
@@ -28,17 +31,21 @@ public class AlumnoService {
 	@Autowired
 	private DatosSEUtil datosSEUtil;
 	
+	Logger log = Logger.getLogger(CursoRepository.class.getName());
+	
     public Alumno porId(Long id) {
 		
-		java.util.Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
-		Alumno alumno = alumnoOp.get();
+		Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
 		
+		if (Optional.empty().equals(alumnoOp)) {
+			log.info("El id ingresado no existe.");
+		}
+		
+		Alumno alumno = alumnoOp.get();
 		return alumno;
 	}
 
-	public Alumno altaAlumno(AlumnoForm alumnoForm) {
-
-		Alumno alumno = new Alumno();
+	public Alumno cargarDatosForm(AlumnoForm alumnoForm, Alumno alumno) {
 
 		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(alumnoForm.getId());
 		Usuario usuario = usuarioOp.get();
