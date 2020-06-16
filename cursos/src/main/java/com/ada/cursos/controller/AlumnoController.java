@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
+import com.ada.cursos.model.Empresa;
+import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
+import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.service.AlumnoService;
+import com.ada.cursos.service.InscripcionService;
 import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +36,11 @@ public class AlumnoController {
 	
 	@Autowired
 	private AlumnoService alumnoServ;
+	
+	@Autowired
+	private InscripcionRepository inscRepo;
+	
+
 	
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
@@ -56,6 +66,43 @@ public class AlumnoController {
 		log.info("Listado completo: listadoAlumnos.");
 		return new ResponseEntity<>(listadoAlumnos, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(path = "/cursos-en-progreso")
+	@Operation(summary = "listarCursosEnProgreso", description = "Trae una lista de cursos por alumno y la filtra por finalizado = false")
+	public ResponseEntity<List<Curso>> listarCursosEnProgreso(@RequestParam Long id) {
+
+		log.info("Metodo listarCursosEnProgreso: buscando alumno id" + id);
+		Alumno alumno = alumnoServ.porId(id);
+		
+		log.info("listando cursos...");
+		Iterable<Inscripcion> ListInscIt = alumno.getInscripciones();
+		List<Inscripcion> inscripciones = Lists.newArrayList(ListInscIt);
+		
+		log.info("filtrando por categoria...");
+		List<Curso> cursosEnProgreso = alumnoServ.filtrarPorFinalizadoFalse(inscripciones);
+
+		return new ResponseEntity<>(cursosEnProgreso, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(path = "/cursos-finalizados")
+	@Operation(summary = "listarCursosFinalizados", description = "Trae una lista de cursos por alumno y la filtra por finalizado = true")
+	public ResponseEntity<List<Curso>> listarCursosFinalizados(@RequestParam Long id) {
+
+		log.info("Metodo listarCursosFinalizados: buscando alumno id" + id);
+		Alumno alumno = alumnoServ.porId(id);
+		
+		log.info("listando cursos...");
+		Iterable<Inscripcion> ListInscIt = alumno.getInscripciones();
+		List<Inscripcion> inscripciones = Lists.newArrayList(ListInscIt);
+		
+		log.info("filtrando por categoria...");
+		List<Curso> cursosFinalizados= alumnoServ.filtrarPorFinalizadoTrue(inscripciones);
+
+		return new ResponseEntity<>(cursosFinalizados, HttpStatus.OK);
+	}
+
 
 
 	@PostMapping(path = "/alta")
