@@ -39,11 +39,9 @@ public class RepService {
 		return rep;
 	}
 
-	public Rep generarRepDeForm(RepForm repForm) {
+	public Rep cargarDatosForm(RepForm repForm, Rep rep) {
 
-		Rep rep = new Rep();
-
-		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(repForm.getId());
+		Optional<Usuario> usuarioOp = usuarioRepo.findById(repForm.getId());
 		Usuario usuario = usuarioOp.get();
 
 		rep.setUsuario(usuario);
