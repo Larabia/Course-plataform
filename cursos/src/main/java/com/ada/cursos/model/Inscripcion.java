@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 
 @Entity
@@ -24,12 +26,14 @@ public class Inscripcion {
 	//Datos del curso	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "curso_id")
+	@JsonManagedReference
 	private Curso curso;	
 	private boolean finalizado;
 	
 	//Datos del alumno
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alumno_id")
+	@JsonManagedReference
     private Alumno alumno;
 
 	

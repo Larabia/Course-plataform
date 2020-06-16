@@ -139,11 +139,11 @@ public class CursoController {
 
 	}
 
-	@PutMapping(path = "/update/{id}")
+	@PutMapping(path = "/modificar/{id}")
 	@Operation(summary = "modificarCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
 	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
 		
-		log.info("Metodo updateCurso: buscando curso...");
+		log.info("Metodo modificarCurso: buscando curso...");
 		Curso curso = cursoServ.porId(id);
 		
 		log.info("Modificando curso...");
@@ -155,11 +155,11 @@ public class CursoController {
 
 	}
 
-	@DeleteMapping(path = "/delete/{id}")
-	@Operation(summary = "deleteCurso", description = "Recibe un Long id, busca el curso por id y borra de la base de datos.")
-	public ResponseEntity<Object> deleteCurso(@PathVariable Long id) {
+	@DeleteMapping(path = "/borrar/{id}")
+	@Operation(summary = "borrarCurso", description = "Recibe un Long id, busca el curso por id y borra de la base de datos.")
+	public ResponseEntity<Object> borrarCurso(@PathVariable Long id) {
 		
-		log.info("Metodo deleteCurso: buscando curso...");
+		log.info("Metodo borrarCurso: buscando curso...");
 		Curso curso = cursoServ.porId(id);
 		
 		log.info("Borrando curso id  " + id);

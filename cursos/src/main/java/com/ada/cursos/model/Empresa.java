@@ -15,8 +15,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonAutoDetect (fieldVisibility = Visibility.ANY)
 @Entity
@@ -37,8 +40,8 @@ public class Empresa {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "rep_id")
     private Rep rep;	
-	@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy="empresa")
+    @JsonManagedReference
     private List<Curso> cursos;
 	
 	
