@@ -39,7 +39,8 @@ public class InscripcionService {
 		inscripcion.setFinalizado(inscripcionBform.isFinalizado());
 		
 		return inscripcion;
-	
+	 
 	}
+	
 
 }
