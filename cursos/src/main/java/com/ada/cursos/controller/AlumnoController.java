@@ -6,15 +6,18 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.AlumnoForm;
+import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
@@ -121,6 +124,37 @@ public class AlumnoController {
 		return new ResponseEntity<>(alumno, HttpStatus.CREATED);
 
 	}
+	
+	@PutMapping(path = "/modificar/{id}")
+	@Operation(summary = "modificarAlumno", description = "Recibe un Long id y un AlumnoForm, busca el alumno por id y lo actualiza con los datos del formulario.")
+	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm, @PathVariable Long id) {
+		
+		log.info("Metodo modificarAlumno: buscando alumno...");
+		Alumno alumno = alumnoServ.porId(id);
+		
+		log.info("Modificando alumno...");
+		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
+		alumnoRepo.save(alumno);
+		
+		log.info("Alumno modificado.");
+		return new ResponseEntity<>(alumno, HttpStatus.OK);
+
+	}
+	
+	@DeleteMapping(path = "/borrar/{id}")
+	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
+	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
+		
+		log.info("Metodo borrarAlumno: buscando curso...");
+		Alumno alumno = alumnoServ.porId(id);
+		
+		log.info("Borrando alumno id  " + id);
+		alumnoRepo.delete(alumno);
+
+		log.info("Alumno borrado.");
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
 	
 
 }
