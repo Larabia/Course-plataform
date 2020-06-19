@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,6 +95,21 @@ public class UsuarioController {
 		return new ResponseEntity<>(usuario, HttpStatus.OK);
 
 	}
+	
+	@DeleteMapping(path = "/borrar/{id}")
+	@Operation(summary = "borrarUsuario", description = "Recibe un Long id, busca el usuario por id y lo borra de la base de datos.")
+	public ResponseEntity<Object> borrarUsuario(@PathVariable Long id) {
+		
+		log.info("Metodo borrarUsuario: buscando usuario...");
+		Usuario usuario = usuarioServ.porId(id);
+		
+		log.info("Borrando usuario id  " + id);
+		usuarioRepo.delete(usuario);
+
+		log.info("Usuario borrado.");
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
 	
 	
 }
