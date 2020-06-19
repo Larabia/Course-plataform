@@ -1,5 +1,6 @@
 package com.ada.cursos.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.UsuarioRepository;
 import com.ada.cursos.service.UsuarioService;
+import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -43,6 +45,19 @@ public class UsuarioController {
 		log.info("Usuario encontrado");
 		return new ResponseEntity<>(usuario, HttpStatus.OK);
 	}
+	
+	@GetMapping(path = "/listado")
+	@Operation(summary = "listarUsuarios", description = "Lista todos los usuarios presentes en la base de datos.")
+	public ResponseEntity<List<Usuario>> listarUsuarios() {
+
+		log.info("Metodo listarUsuarios: listando usuario...");
+		Iterable<Usuario> ListUsuarioIt = usuarioRepo.findAll();
+		List<Usuario> listarUsuarios = Lists.newArrayList(ListUsuarioIt);
+
+		log.info("Listado completo: listarUsuarios.");
+		return new ResponseEntity<>(listarUsuarios, HttpStatus.OK);
+	}
+	
 	
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta usuario", description = "Ingrasa un objeto usuario a la base de datos")
