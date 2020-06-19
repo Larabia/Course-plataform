@@ -1,5 +1,7 @@
 package com.ada.cursos.controller;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 import com.ada.cursos.service.InscripcionService;
+import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -54,6 +57,18 @@ public class InscripcionController {
 
 		log.info("Inscripcion encontrado");
 		return new ResponseEntity<>(inscripcion, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/listado")
+	@Operation(summary = "listarInscripciones", description = "Lista todos las inscripciones presentes en la base de datos.")
+	public ResponseEntity<List<Inscripcion>> listarInscripciones() {
+
+		log.info("Metodo listarInscripciones: listando inscripciones...");
+		Iterable<Inscripcion> ListInscIt = inscripcionRepo.findAll();
+		List<Inscripcion> listadoInscripciones = Lists.newArrayList(ListInscIt);
+
+		log.info("Listado completo: listadoInscripciones.");
+		return new ResponseEntity<>(listadoInscripciones, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/alta")
