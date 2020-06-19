@@ -9,10 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.form.LoginForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Usuario;
@@ -66,12 +68,30 @@ public class UsuarioController {
 				
 		log.info("metodo: altaUsuario.");
 		
-		Usuario usuario = usuarioServ.generarUsuarioDeForm(loginForm);
+		Usuario usuario = new Usuario();
+		
+		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
 		usuarioRepo.save(usuario);
 	
 		log.info("metodo: Usuario guardado.");
 
 		return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+
+	}
+	
+	@PutMapping(path = "/modificar/{id}")
+	@Operation(summary = "modificarUsuario", description = "Recibe un Long id y un loginForm, busca el usuario por id y lo actualiza con los datos del formulario.")
+	public ResponseEntity<Usuario> modificarUsuario(@RequestBody LoginForm loginForm, @PathVariable Long id) {
+		
+		log.info("Metodo modificarUsuario: buscando usuario...");
+		Usuario usuario = usuarioServ.porId(id);
+		
+		log.info("Modificando usuario...");
+		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
+		usuarioRepo.save(usuario);
+		
+		log.info("Usuario modificado.");
+		return new ResponseEntity<>(usuario, HttpStatus.OK);
 
 	}
 	

@@ -32,9 +32,8 @@ public class UsuarioService {
 	}
 	
 	
-	public Usuario generarUsuarioDeForm (LoginForm loginForm) {
+	public Usuario cargarDatosForm (LoginForm loginForm, Usuario usuario) {
 		
-		Usuario usuario = new Usuario();
 		usuario.setEmail(loginForm.getEmail());
 		usuario.setPass(loginForm.getPass());
 		
