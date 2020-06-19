@@ -14,6 +14,8 @@ public class InscripcionForm {
 	//Datos del alumno
 	private Long alumnoId;
 
+	
+	
 	public boolean isConBeca() {
 		return conBeca;
 	}
