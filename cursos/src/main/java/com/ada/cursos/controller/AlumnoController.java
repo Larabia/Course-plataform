@@ -107,7 +107,6 @@ public class AlumnoController {
 	}
 
 
-
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta Alumno", description = "Ingrasa un objeto alumno con datosSE a la base de datos")
 	
@@ -124,6 +123,7 @@ public class AlumnoController {
 		return new ResponseEntity<>(alumno, HttpStatus.CREATED);
 
 	}
+	
 	
 	@PutMapping(path = "/modificar/{id}")
 	@Operation(summary = "modificarAlumno", description = "Recibe un Long id y un AlumnoForm, busca el alumno por id y lo actualiza con los datos del formulario.")

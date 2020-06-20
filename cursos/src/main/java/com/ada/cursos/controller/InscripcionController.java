@@ -10,11 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.form.InscripcionForm;
+import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
@@ -86,6 +89,22 @@ public class InscripcionController {
 		log.info("metodo: Inscripcion guardada.");
 
 		return new ResponseEntity<>(inscripcion, HttpStatus.CREATED);
+
+	}
+	
+	@PutMapping(path = "/modificar/{id}")
+	@Operation(summary = "modificarInscripcion", description = "Recibe un Long id y un InscripcionForm, busca la inscripcion por id y lo actualiza con los datos del formulario.")
+	public ResponseEntity<Inscripcion> modificarInscripcion(@RequestBody InscripcionForm inscripcionForm, @PathVariable Long id) {
+		
+		log.info("Metodo modificarInscripcion: buscando inscripcion...");
+		Inscripcion inscripcion = inscripcionServ.porId(id);
+		
+		log.info("Modificando inscripcion...");
+		inscripcion = inscripcionServ.cargarDatosForm(inscripcionForm, inscripcion);
+		inscripcionRepo.save(inscripcion);
+		
+		log.info("Inscripcion modificada.");
+		return new ResponseEntity<>(inscripcion, HttpStatus.OK);
 
 	}
 
