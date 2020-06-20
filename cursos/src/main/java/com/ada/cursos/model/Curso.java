@@ -9,9 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Table (name = "Curso")
@@ -37,6 +35,16 @@ public class Curso {
 	
 	
     
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+
 	public boolean isAbierto() {
 		return abierto;
 	}
@@ -94,16 +102,6 @@ public class Curso {
 
 	public void setCupoBecas(int cupoBecas) {
 		this.cupoBecas = cupoBecas;
-	}
-
-
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
 	}
 
 

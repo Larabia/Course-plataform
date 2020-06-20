@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.cursos.form.AlumnoForm;
+
 import com.ada.cursos.form.InscripcionForm;
-import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
@@ -119,7 +118,7 @@ public class InscripcionController {
 		log.info("Borrando inscripcion id  " + id);
 		inscripcionRepo.delete(inscripcion);
 
-		log.info("Inscripcion borrado.");
+		log.info("Inscripcion borrada.");
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 

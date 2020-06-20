@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.cursos.form.EmpresaForm;
 import com.ada.cursos.form.RepForm;
-import com.ada.cursos.model.Empresa;
 import com.ada.cursos.model.Rep;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.RepRepository;
