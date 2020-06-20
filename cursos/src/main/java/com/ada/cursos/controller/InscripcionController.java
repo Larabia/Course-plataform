@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.InscripcionForm;
-import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
@@ -74,13 +73,14 @@ public class InscripcionController {
 	@PostMapping(path = "/alta")
 	@Operation(summary = "Alta Inscripcion", description = "Ingrasa un objeto Inscripcion a la base de datos")
 
-	public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionBform) {
+	public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionForm) {
 
 		log.info("metodo: altaInscripcion.");
 
 		Inscripcion inscripcion = new Inscripcion();
-
-		inscripcion = inscripcionServ.cargarDatosForm(inscripcionBform, inscripcion);
+		
+		inscripcionServ.actualizarCupo(inscripcionForm);
+		inscripcion = inscripcionServ.cargarDatosForm(inscripcionForm, inscripcion);
 		inscripcionRepo.save(inscripcion);
 
 		log.info("metodo: Inscripcion guardada.");

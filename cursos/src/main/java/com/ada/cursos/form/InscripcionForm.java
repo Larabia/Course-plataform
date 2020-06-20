@@ -5,6 +5,7 @@ public class InscripcionForm {
 	
 	//Tipo de inscripcion
 	private boolean conBeca;
+	private boolean becaAprobada;
 	private String porcentBeca;
 	
 	//Datos del curso
@@ -16,6 +17,14 @@ public class InscripcionForm {
 
 	
 	
+	public boolean isBecaAprobada() {
+		return becaAprobada;
+	}
+
+	public void setBecaAprobada(boolean becaAprobada) {
+		this.becaAprobada = becaAprobada;
+	}
+
 	public boolean isConBeca() {
 		return conBeca;
 	}
