@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -107,5 +108,20 @@ public class InscripcionController {
 		return new ResponseEntity<>(inscripcion, HttpStatus.OK);
 
 	}
+	
+	@DeleteMapping(path = "/borrar/{id}")
+	@Operation(summary = "borrarInscripcion", description = "Recibe un Long id, busca la Inscripcion por id y la borra de la base de datos.")
+	public ResponseEntity<Object> borrarInscripcion(@PathVariable Long id) {
+		
+		log.info("Metodo borrarInscripcion: buscando inscripcion...");
+		Inscripcion inscripcion = inscripcionServ.porId(id);
+		
+		log.info("Borrando inscripcion id  " + id);
+		inscripcionRepo.delete(inscripcion);
+
+		log.info("Inscripcion borrado.");
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
 
 }
