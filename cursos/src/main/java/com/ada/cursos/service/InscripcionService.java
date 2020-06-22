@@ -1,5 +1,8 @@
 package com.ada.cursos.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -14,6 +17,7 @@ import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.repository.UsuarioRepository;
+import com.google.common.collect.Lists;
 
 @Service
 public class InscripcionService {
@@ -23,6 +27,9 @@ public class InscripcionService {
 
 	@Autowired
 	AlumnoRepository alumnoRepo;
+
+	@Autowired
+	AlumnoService alumnoServ;
 
 	@Autowired
 	CursoRepository cursoRepo;
@@ -81,29 +88,118 @@ public class InscripcionService {
 		if (!inscripForm.isConBeca()) {
 
 			if (cupo == 0) {
-				
+
 				log.info("No quedan cupos disponibles en este curso.");
 			} else {
-				
+
 				curso.setCupo(cupo - 1);
 				cursoRepo.save(curso);
 			}
 
 		} else if (inscripForm.isBecaAprobada()) {
-			
-			if (cupoBecas == 0 || cupo == 0 ) {
-				
+
+			if (cupoBecas == 0 || cupo == 0) {
+
 				log.info("No quedan becas disponibles en este curso.");
-				
+
 			} else {
-				
-				curso.setCupoBecas(cupoBecas - 1);
-				curso.setCupo(cupo - 1);
-				cursoRepo.save(curso);
+
+				if (tieneBecasEnProgreso(inscripForm)) {
+
+					log.info("El usuario ya tiene becas en progreso.");
+				} else {
+
+					curso.setCupoBecas(cupoBecas - 1);
+					curso.setCupo(cupo - 1);
+					cursoRepo.save(curso);
+				}
 			}
 
 		}
 
 	}
+
+	public boolean hayCuposDisponibles(InscripcionForm inscripForm) {
+
+		Curso curso = cursoServ.porId(inscripForm.getCursoId());
+		int cupo = curso.getCupo();
+
+		if (cupo == 0) {
+			
+			log.info("No quedan cupos disponibles en este curso.");
+			return false;
+
+		} else {
+
+			return true;
+		}
+
+	}
+
+	public boolean hayCuposDisponiblesConBeca(InscripcionForm inscripForm) {
+
+		Curso curso = cursoServ.porId(inscripForm.getCursoId());
+		int cupo = curso.getCupo();
+		int cupoBecas = curso.getCupoBecas();
+
+		if (cupoBecas == 0 || cupo == 0) {
+			log.info("No quedan becas disponibles en este curso.");
+			return false;
+
+		} else {
+			return true;
+
+		}
+
+	}
+
+	public boolean tieneBecasEnProgreso(InscripcionForm inscripForm) {
+
+		Long id = inscripForm.getAlumnoId();
+		Alumno alumno = alumnoServ.porId(id);
+
+		Iterable<Inscripcion> listInscIt = inscripRepo.findByAlumno(alumno);
+		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
+		List<Inscripcion> InscBecaEnProgreso = new ArrayList<Inscripcion>();
+		Iterator<Inscripcion> filtrarPorFinalizadoYbeca = inscripciones.iterator();
+
+		while (filtrarPorFinalizadoYbeca.hasNext()) {
+			
+			Inscripcion inscripcion = filtrarPorFinalizadoYbeca.next();
+			
+			if (!inscripcion.isFinalizado() && inscripcion.isBecaAprobada()) {
+				InscBecaEnProgreso.add(inscripcion);
+			}
+		}
+
+		if (InscBecaEnProgreso.isEmpty()) {
+			return false;
+		} else {
+			log.info("El usuario tiene otras becas en progreso");
+			return true;
+		}
+
+	}
+
+	public boolean cumpleRequisitos(InscripcionForm inscripForm) {
+
+		if (!inscripForm.isConBeca()) {
+
+			if (hayCuposDisponibles(inscripForm)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (inscripForm.isConBeca()) {
+			if (hayCuposDisponiblesConBeca(inscripForm) && !tieneBecasEnProgreso(inscripForm)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 
 }

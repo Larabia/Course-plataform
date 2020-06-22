@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.cursos.form.AlumnoForm;
+
 import com.ada.cursos.form.InscripcionForm;
-import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
@@ -79,17 +78,24 @@ public class InscripcionController {
 
 	public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionForm) {
 
-		log.info("metodo: altaInscripcion.");
-
 		Inscripcion inscripcion = new Inscripcion();
 		
-		inscripcionServ.actualizarCupo(inscripcionForm);
+		log.info("metodo: altaInscripcion.");
+		
+		if (inscripcionServ.cumpleRequisitos(inscripcionForm)) {
+		
 		inscripcion = inscripcionServ.cargarDatosForm(inscripcionForm, inscripcion);
 		inscripcionRepo.save(inscripcion);
+		inscripcionServ.actualizarCupo(inscripcionForm);
 
 		log.info("metodo: Inscripcion guardada.");
 
 		return new ResponseEntity<>(inscripcion, HttpStatus.CREATED);
+		} else {
+			
+			log.info("metodo: la inscripcion no cumple con los requisitos.");
+			return new ResponseEntity<>(inscripcion, HttpStatus.BAD_REQUEST);
+		}
 
 	}
 	
@@ -102,7 +108,8 @@ public class InscripcionController {
 		
 		log.info("Modificando inscripcion...");
 		inscripcion = inscripcionServ.cargarDatosForm(inscripcionForm, inscripcion);
-		inscripcionRepo.save(inscripcion);
+		inscripcionRepo.save(inscripcion);	
+		inscripcionServ.actualizarCupo(inscripcionForm);
 		
 		log.info("Inscripcion modificada.");
 		return new ResponseEntity<>(inscripcion, HttpStatus.OK);
@@ -119,7 +126,7 @@ public class InscripcionController {
 		log.info("Borrando inscripcion id  " + id);
 		inscripcionRepo.delete(inscripcion);
 
-		log.info("Inscripcion borrado.");
+		log.info("Inscripcion borrada.");
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 

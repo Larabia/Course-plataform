@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.form.LoginForm;
-import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.UsuarioRepository;
 import com.ada.cursos.service.UsuarioService;
@@ -103,7 +101,7 @@ public class UsuarioController {
 		log.info("Metodo borrarUsuario: buscando usuario...");
 		Usuario usuario = usuarioServ.porId(id);
 		
-		log.info("Borrando usuario id  " + id);
+		log.info("Borrando usuario id  " + id);	
 		usuarioRepo.delete(usuario);
 
 		log.info("Usuario borrado.");

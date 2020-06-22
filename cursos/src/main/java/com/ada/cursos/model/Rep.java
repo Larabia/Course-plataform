@@ -7,7 +7,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 
 
@@ -26,9 +26,7 @@ public class Rep {
 	private String doc;
 	private String cargo;
 	private String email;	
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "rep")
-	@JsonManagedReference
-    private Empresa empresa;
+
 	
 		
 	public String getTipoDoc() {
@@ -55,12 +53,12 @@ public class Rep {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
+//	public Empresa getEmpresa() {
+//		return empresa;
+//	}
+//	public void setEmpresa(Empresa empresa) {
+//		this.empresa = empresa;
+//	}
 	public Long getId() {
 		return id;
 	}

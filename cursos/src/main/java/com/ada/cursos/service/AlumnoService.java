@@ -31,14 +31,12 @@ public class AlumnoService {
 	private AlumnoRepository alumnoRepo;
 
 	@Autowired
-	private DateUtil dateUtil;
-
-	@Autowired
 	private DatosSEUtil datosSEUtil;
 	
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 	
-    public Alumno porId(Long id) {
+ 
+	public Alumno porId(Long id) {
 		
 		Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
 		
@@ -49,8 +47,7 @@ public class AlumnoService {
 		Alumno alumno = alumnoOp.get();
 		return alumno;
 	}
-    
-   
+     
 
 	public Alumno cargarDatosForm(AlumnoForm alumnoForm, Alumno alumno) {
 
@@ -60,7 +57,7 @@ public class AlumnoService {
 		DatosSE datosSE = datosSEUtil.nuevoDatosSE(alumnoForm);
 
 		try {
-			Date fechaNac = DateUtil.formatParse(dateUtil.PATTERN_Y4_M2_D2, alumnoForm.getFechaNac());
+			Date fechaNac = DateUtil.formatParse(DateUtil.PATTERN_Y4_M2_D2, alumnoForm.getFechaNac());
 			alumno.setFechaNac(fechaNac);
 		} catch (ParseException e) {
 			System.out.println("El formato de fecha ingresado es incorrecto.");
