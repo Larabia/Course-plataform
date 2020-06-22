@@ -101,7 +101,7 @@ public class UsuarioController {
 		log.info("Metodo borrarUsuario: buscando usuario...");
 		Usuario usuario = usuarioServ.porId(id);
 		
-		log.info("Borrando usuario id  " + id);
+		log.info("Borrando usuario id  " + id);	
 		usuarioRepo.delete(usuario);
 
 		log.info("Usuario borrado.");

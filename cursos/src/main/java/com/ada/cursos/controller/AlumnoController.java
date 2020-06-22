@@ -76,7 +76,7 @@ public class AlumnoController {
 		Iterable<Inscripcion> listInscIt = inscripcionRepo.findByAlumno(alumno);
 		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
 
-		log.info("filtrando por categoria...");
+		log.info("filtrando cursos en progreso...");
 		List<Curso> cursosEnProgreso = alumnoServ.filtrarPorFinalizadoFalse(inscripciones);
 
 		log.info("Lista cursosEnProgreso creada.");
