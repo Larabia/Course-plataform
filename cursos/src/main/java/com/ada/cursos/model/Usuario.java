@@ -31,9 +31,8 @@ public class Usuario {
 	private Set<Rol> roles = new HashSet<>();
 
 
-	public Usuario(Long id, String userName, String email, String password) {
+	public Usuario(String userName, String email, String password) {
 		super();
-		this.id = id;
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
