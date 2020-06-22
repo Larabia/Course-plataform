@@ -51,6 +51,7 @@ public class UsuarioService {
 
 	public Usuario cargarDatosForm(LoginForm loginForm, Usuario usuario) {
 
+		usuario.setUserName(loginForm.getUserName());
 		usuario.setEmail(loginForm.getEmail());
 		usuario.setPassword(loginForm.getPass());
 
