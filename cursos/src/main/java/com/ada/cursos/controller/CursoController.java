@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,26 +36,26 @@ public class CursoController {
 
 	@Autowired
 	private CursoService cursoServ;
-	
+
 	@Autowired
 	private EmpresaService empServ;
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
-	
-	
+
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "cursoPorId", description = "Recibe como un Long id y devuelve el Curso con el id correspondiente.")
 	public ResponseEntity<Curso> cursoPorId(@PathVariable Long id) {
 
-		log.info("Metodo cursoPorId: buscando curso id"+id);
-		Curso curso = cursoServ.porId(id);		
-		
+		log.info("Metodo cursoPorId: buscando curso id" + id);
+		Curso curso = cursoServ.porId(id);
+
 		log.info("Curso encontrado");
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/listado")
 	@Operation(summary = "listarCursos", description = "Lista todos los cursos presentes en la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursos() {
 
 		log.info("Metodo listarCursos: listando cursos...");
@@ -84,7 +85,7 @@ public class CursoController {
 		log.info("Metodo listarPorCategoria: listando cursos de la categoria " + categoria + "...");
 		Iterable<Curso> ListCurIt = cursoRepo.findByCategoriaStartingWith(categoria);
 		List<Curso> cursosPorCat = Lists.newArrayList(ListCurIt);
-		
+
 		log.info("Listado completo: cursosPorCat.");
 		return new ResponseEntity<>(cursosPorCat, HttpStatus.OK);
 	}
@@ -95,61 +96,68 @@ public class CursoController {
 
 		log.info("Metodo listarPorEmpresa: buscando empresa id" + id);
 		Empresa empresa = empServ.porId(id);
-		
+
 		log.info("listando cursos...");
 		Iterable<Curso> ListCurIt = empresa.getCursos();
 		List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
-		
+
 		log.info("Listado completo: cursosPorEmp");
 		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(path = "/listado-por-empresa-y-categoria")
 	@Operation(summary = "listarPorEmpresaYcategoria", description = "Trae una lista de cursos por empresa y la filtra por categoria")
-	public ResponseEntity<List<Curso>> listarPorEmpresaYcategoria(@RequestParam Long id, @RequestParam String categoria) {
+	public ResponseEntity<List<Curso>> listarPorEmpresaYcategoria(@RequestParam Long id,
+			@RequestParam String categoria) {
 
 		log.info("Metodo listarPorEmpresaYcategoria: buscando empresa id" + id);
 		Empresa empresa = empServ.porId(id);
-		
+
 		log.info("listando cursos...");
 		Iterable<Curso> ListCurIt = empresa.getCursos();
 		List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
-		
+
 		log.info("filtrando por categoria...");
 		List<Curso> cursosPorEmpYcat = cursoServ.filtrarPorCategoria(cursosPorEmp, categoria);
 
 		return new ResponseEntity<>(cursosPorEmpYcat, HttpStatus.OK);
 	}
 
-
 	@PostMapping(path = "/alta")
 	@Operation(summary = "altaCurso", description = "Persiste un nuevo Curso en la base de datos.")
-
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Curso> altaCurso(@RequestBody CursoForm cursoForm) {
 
 		log.info("Metodo altaCurso: creando curso...");
 
 		Curso curso = new Curso();
 		curso = cursoServ.cargarDatosForm(cursoForm, curso);
-		cursoRepo.save(curso);
 
-		log.info("Curso guardado.");
+		if (cursoServ.empresaAprobada(curso)) {
+			cursoRepo.save(curso);
+			log.info("Curso guardado.");
+			return new ResponseEntity<>(curso, HttpStatus.CREATED);
 
-		return new ResponseEntity<>(curso, HttpStatus.CREATED);
+		}else {
+			
+			log.info("La empresa aun no fue aprobada por el admin.");
+			return new ResponseEntity<>(curso, HttpStatus.METHOD_NOT_ALLOWED);
+		}
 
 	}
 
 	@PutMapping(path = "/modificar/{id}")
 	@Operation(summary = "modificarCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
-		
+
 		log.info("Metodo modificarCurso: buscando curso...");
 		Curso curso = cursoServ.porId(id);
-		
+
 		log.info("Modificando curso...");
 		curso = cursoServ.cargarDatosForm(cursoForm, curso);
 		cursoRepo.save(curso);
-		
+
 		log.info("Curso modificado.");
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 
@@ -157,11 +165,12 @@ public class CursoController {
 
 	@DeleteMapping(path = "/borrar/{id}")
 	@Operation(summary = "borrarCurso", description = "Recibe un Long id, busca el curso por id y borra de la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarCurso(@PathVariable Long id) {
-		
+
 		log.info("Metodo borrarCurso: buscando curso...");
 		Curso curso = cursoServ.porId(id);
-		
+
 		log.info("Borrando curso id  " + id);
 		cursoRepo.delete(curso);
 
