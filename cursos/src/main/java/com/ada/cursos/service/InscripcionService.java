@@ -69,23 +69,21 @@ public class InscripcionService {
 		Curso curso = cursoOp.get();
 
 		inscripcion.setAlumno(alumno);
-		inscripcion.setCurso(curso);
-		inscripcion.setFinalizado(inscripcionForm.isFinalizado());
+		inscripcion.setCurso(curso);		
 		inscripcion.setConBeca(inscripcionForm.isConBeca());
-		inscripcion.setBecaAprobada(inscripcionForm.isBecaAprobada());
-		inscripcion.setPorcentBeca(inscripcionForm.getPorcentBeca());
+	
 
 		return inscripcion;
 
 	}
 
-	public void actualizarCupo(InscripcionForm inscripForm) {
+	public void actualizarCupo(Inscripcion inscripcion) {
 
-		Curso curso = cursoServ.porId(inscripForm.getCursoId());
+		Curso curso = inscripcion.getCurso();
 		int cupo = curso.getCupo();
 		int cupoBecas = curso.getCupoBecas();
 
-		if (!inscripForm.isConBeca()) {
+		if (!inscripcion.isConBeca()) {
 
 			if (cupo == 0) {
 
@@ -96,7 +94,7 @@ public class InscripcionService {
 				cursoRepo.save(curso);
 			}
 
-		} else if (inscripForm.isBecaAprobada()) {
+		} else if (inscripcion.isBecaAprobada()) {
 
 			if (cupoBecas == 0 || cupo == 0) {
 
@@ -104,7 +102,7 @@ public class InscripcionService {
 
 			} else {
 
-				if (tieneBecasEnProgreso(inscripForm)) {
+				if (tieneBecasEnProgreso(inscripcion)) {
 
 					log.info("El usuario ya tiene becas en progreso.");
 				} else {
@@ -119,9 +117,9 @@ public class InscripcionService {
 
 	}
 
-	public boolean hayCuposDisponibles(InscripcionForm inscripForm) {
+	public boolean hayCuposDisponibles(Inscripcion inscripcion) {
 
-		Curso curso = cursoServ.porId(inscripForm.getCursoId());
+		Curso curso = inscripcion.getCurso();
 		int cupo = curso.getCupo();
 
 		if (cupo == 0) {
@@ -136,9 +134,9 @@ public class InscripcionService {
 
 	}
 
-	public boolean hayCuposDisponiblesConBeca(InscripcionForm inscripForm) {
+	public boolean hayCuposDisponiblesConBeca(Inscripcion inscripcion) {
 
-		Curso curso = cursoServ.porId(inscripForm.getCursoId());
+		Curso curso = inscripcion.getCurso();
 		int cupo = curso.getCupo();
 		int cupoBecas = curso.getCupoBecas();
 
@@ -153,10 +151,9 @@ public class InscripcionService {
 
 	}
 
-	public boolean tieneBecasEnProgreso(InscripcionForm inscripForm) {
-
-		Long id = inscripForm.getAlumnoId();
-		Alumno alumno = alumnoServ.porId(id);
+	public boolean tieneBecasEnProgreso(Inscripcion inscripcion) {
+		
+		Alumno alumno = inscripcion.getAlumno();
 
 		Iterable<Inscripcion> listInscIt = inscripRepo.findByAlumno(alumno);
 		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
@@ -165,10 +162,10 @@ public class InscripcionService {
 
 		while (filtrarPorFinalizadoYbeca.hasNext()) {
 			
-			Inscripcion inscripcion = filtrarPorFinalizadoYbeca.next();
+			Inscripcion inscripcionIt = filtrarPorFinalizadoYbeca.next();
 			
-			if (!inscripcion.isFinalizado() && inscripcion.isBecaAprobada()) {
-				InscBecaEnProgreso.add(inscripcion);
+			if (!inscripcionIt.isFinalizado() && inscripcionIt.isBecaAprobada()) {
+				InscBecaEnProgreso.add(inscripcionIt);
 			}
 		}
 
@@ -180,18 +177,30 @@ public class InscripcionService {
 		}
 
 	}
+	
+	public boolean tieneDatosSE (Inscripcion inscripcion) {
+		
+		Alumno alumno = inscripcion.getAlumno();
+		
+		if (alumno.getDatosSE()==null) {
+			log.info("El alumno no tiene cargados los datos SE.");
+			return false;
+		} else {
+			return true;
+		}
+	}
 
-	public boolean cumpleRequisitos(InscripcionForm inscripForm) {
+	public boolean cumpleRequisitos(Inscripcion inscripcion) {
 
-		if (!inscripForm.isConBeca()) {
+		if (!inscripcion.isConBeca()) {
 
-			if (hayCuposDisponibles(inscripForm)) {
+			if (hayCuposDisponibles(inscripcion)) {
 				return true;
 			} else {
 				return false;
 			}
-		} else if (inscripForm.isConBeca()) {
-			if (hayCuposDisponiblesConBeca(inscripForm) && !tieneBecasEnProgreso(inscripForm)) {
+		} else if (inscripcion.isConBeca()) {
+			if (hayCuposDisponiblesConBeca(inscripcion) && !tieneBecasEnProgreso(inscripcion) &&  tieneDatosSE(inscripcion)) {
 				return true;
 			} else {
 				return false;
