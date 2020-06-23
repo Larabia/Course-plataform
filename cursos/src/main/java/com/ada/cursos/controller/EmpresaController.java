@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class EmpresaController {
 
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "empresaPorId", description = "Recibe como un Long id y devuelve un objeto Empresa con el id correspondiente.")
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Empresa> empresaPorId(@PathVariable Long id) {
 
 		log.info("Metodo empresaPorId: buscando curso id"+id);
@@ -50,6 +52,7 @@ public class EmpresaController {
 	
 	@GetMapping(path = "/listado")
 	@Operation(summary = "listarEmpresas", description = "Lista todas las empresas presentes en la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Empresa>> listarEmpresas() {
 
 		log.info("Metodo listarCursos: listando cursos...");
@@ -62,7 +65,7 @@ public class EmpresaController {
 
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta Empresa", description = "Ingrasa un objeto Empresa a la base de datos")
-	
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Empresa> altaEmpresa(@RequestBody EmpresaForm empresaForm) {	
 		
 		log.info("Metodo altaEmpresa: creando empresa...");
@@ -77,8 +80,26 @@ public class EmpresaController {
 
 	}
 	
+	@PutMapping(path = "/aprobar/{id}")
+	@Operation(summary = "aprobarEmpresa", description = "Recibe un Long id, busca la empresa por id y modifica isAprobada = true.")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Empresa> aprobarEmpresa(@PathVariable Long id) {
+		
+		log.info("Metodo aprobarEmpresa: buscando empresa...");
+		Empresa empresa = empresaServ.porId(id);
+		
+		log.info("Aprobando empresa...");
+		empresa.setAprobada(true);
+		empresaRepo.save(empresa);
+		
+		log.info("Empresa aprobada.");
+		return new ResponseEntity<>(empresa, HttpStatus.OK);
+
+	}
+	
 	@PutMapping(path = "/modificar/{id}")
 	@Operation(summary = "modificarEmpresa", description = "Recibe un Long id y un EmpresaForm, busca la empresa por id y la actualiza con los datos del formulario.")
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Empresa> modificarEmpresa(@RequestBody EmpresaForm empresaForm, @PathVariable Long id) {
 		
 		log.info("Metodo modificarEmpresa: buscando empresa...");
@@ -95,6 +116,7 @@ public class EmpresaController {
 	
 	@DeleteMapping(path = "/borrar/{id}")
 	@Operation(summary = "borrarEmpresa", description = "Recibe un Long id, busca la empresa por id y la borra de la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarEmpresa(@PathVariable Long id) {
 		
 		log.info("Metodo borrarEmpresa: buscando empresa...");

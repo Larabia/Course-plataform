@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class RepController {
 
 	
 	@GetMapping(path = "/{id}")
+	@PreAuthorize("hasRole('REP')")
 	@Operation(summary = "repPorId", description = "Recibe un Long id y devuelve un objeto Rep con el id correspondiente.")
 	public ResponseEntity<Rep> repPorId(@PathVariable Long id) {
 
@@ -51,6 +53,7 @@ public class RepController {
 	
 	@GetMapping(path = "/listado")
 	@Operation(summary = "listarReps", description = "Lista todas los Reps presentes en la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Rep>> listarEmpresas() {
 
 		log.info("Metodo listarReps: listando cursos...");
@@ -64,7 +67,7 @@ public class RepController {
 
 	@PostMapping(path = "/alta")
 	@Operation (summary = "Alta Rep", description = "Ingrasa un objeto Rep a la base de datos")
-	
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Rep> altaRep(@RequestBody RepForm repForm) {	
 		
 		log.info("Metodo altaRep: creando rep...");
@@ -81,6 +84,7 @@ public class RepController {
 	
 	@PutMapping(path = "/modificar/{id}")
 	@Operation(summary = "modificarRep", description = "Recibe un Long id y un RepForm, busca el rep por id y lo actualiza con los datos del formulario.")
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Rep> modificarRep(@RequestBody RepForm repForm, @PathVariable Long id) {
 		
 		log.info("Metodo modificarRep: buscando rep...");
@@ -97,6 +101,7 @@ public class RepController {
 	
 	@DeleteMapping(path = "/borrar/{id}")
 	@Operation(summary = "borrarRep", description = "Recibe un Long id, busca el Rep por id y lo borra de la base de datos.")
+	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Object> borrarRep(@PathVariable Long id) {
 		
 		log.info("Metodo borrarRep: buscando rep...");

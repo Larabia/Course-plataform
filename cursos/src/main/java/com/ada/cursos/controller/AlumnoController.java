@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +56,7 @@ public class AlumnoController {
 
 	@GetMapping(path = "/listado")
 	@Operation(summary = "listarAlumnos", description = "Lista todos los alumnos presentes en la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Alumno>> listarAlumnos() {
 
 		log.info("Metodo listarAlumnos: listando alumnos...");
@@ -67,6 +69,7 @@ public class AlumnoController {
 
 	@GetMapping(path = "/cursos-en-progreso")
 	@Operation(summary = "listarCursosEnProgreso", description = "Trae una lista de cursos por alumno y la filtra por finalizado = false")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursosEnProgreso(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosEnProgreso: buscando alumno id" + id);
@@ -85,6 +88,7 @@ public class AlumnoController {
 
 	@GetMapping(path = "/cursos-finalizados")
 	@Operation(summary = "listarCursosFinalizados", description = "Trae una lista de cursos por alumno y la filtra por finalizado = true")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursosFinalizados(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosFinalizados: buscando alumno id" + id);
@@ -103,7 +107,6 @@ public class AlumnoController {
 
 	@PostMapping(path = "/alta")
 	@Operation(summary = "Alta Alumno", description = "Ingrasa un objeto alumno con datosSE a la base de datos")
-
 	public ResponseEntity<Alumno> altaAlumno(@RequestBody AlumnoForm alumnoForm) {
 
 		log.info("metodo: altaAlumno.");
@@ -136,6 +139,7 @@ public class AlumnoController {
 
 	@DeleteMapping(path = "/borrar/{id}")
 	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
 
 		log.info("Metodo borrarAlumno: buscando curso...");

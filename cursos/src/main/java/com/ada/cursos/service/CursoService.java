@@ -14,12 +14,9 @@ import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
 import com.ada.cursos.repository.CursoRepository;
 
-
-
 @Service
 public class CursoService {
 
-	
 	@Autowired
 	private EmpresaService empService;
 
@@ -28,8 +25,6 @@ public class CursoService {
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
-	
-	
 	public Curso porId(Long id) {
 
 		Optional<Curso> cursoOp = cursoRepo.findById(id);
@@ -44,7 +39,7 @@ public class CursoService {
 	}
 
 	public Curso cargarDatosForm(CursoForm cursoForm, Curso curso) {
-		
+
 		Empresa empresa = empService.porId(cursoForm.getEmpId());
 
 		curso.setNombre(cursoForm.getNombre());
@@ -60,20 +55,31 @@ public class CursoService {
 		return curso;
 
 	}
-	
+
 	public List<Curso> filtrarPorCategoria(List<Curso> cursosPorEmp, String categoria) {
-		
+
 		List<Curso> cursosPorEmpYcat = new ArrayList<Curso>();
 		Iterator<Curso> filtrarPorCat = cursosPorEmp.iterator();
-		
+
 		while (filtrarPorCat.hasNext()) {
 			Curso curso = filtrarPorCat.next();
-		    if( categoria.equals(curso.getCategoria())) {
-		    	cursosPorEmpYcat.add(curso);              
-		    }
+			if (categoria.equals(curso.getCategoria())) {
+				cursosPorEmpYcat.add(curso);
+			}
 		}
-			
+
 		return cursosPorEmpYcat;
+	}
+
+	public boolean empresaAprobada(Curso curso) {
+
+		Empresa empresa = curso.getEmpresa();
+
+		if (empresa.isAprobada()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

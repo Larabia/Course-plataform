@@ -75,6 +75,16 @@ public class AlumnoService {
 
 	}
 	
+	public boolean tieneDatosSE (Alumno alumno) {
+		
+		if (alumno.getDatosSE()==null) {
+			log.info("El alumno no tiene cargados los datos SE.");
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	public List<Curso> filtrarPorFinalizadoFalse(List<Inscripcion> inscripciones) {
 		
 		List<Inscripcion> InscCursosEnProgreso = new ArrayList<Inscripcion>();
