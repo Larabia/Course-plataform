@@ -5,57 +5,59 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.ada.cursos.form.LoginForm;
+
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 
+import org.springframework.transaction.annotation.Transactional;
+
+
 @Service
 @Transactional
 public class UsuarioService {
+	
+	@Autowired
+	private UsuarioRepository usuarioRepo;
+	
+	Logger log = Logger.getLogger(CursoRepository.class.getName());
+	
+	 public Optional<Usuario> getByNombreUsuario(String nu){
+	        return usuarioRepo.findByNombreUsuario(nu);
+	    }
 
-    @Autowired
-    UsuarioRepository usuarioRepository;
-    
-    Logger log = Logger.getLogger(CursoRepository.class.getName());
+	    public boolean existePorNombre(String nu){
+	        return usuarioRepo.existsByNombreUsuario(nu);
+	    }
 
-    public Optional<Usuario> getByNombreUsuario(String nu){
-        return usuarioRepository.findByUserName(nu);
-    }
+	    public  boolean existePorEmail(String email){
+	        return usuarioRepo.existsByEmail(email);
+	    }
 
-    public boolean existePorNombre(String nu){
-        return usuarioRepository.existsByUserName(nu);
-    }
-
-    public  boolean existePorEmail(String email){
-        return usuarioRepository.existsByEmail(email);
-    }
-
-    public void guardar(Usuario usuario){
-        usuarioRepository.save(usuario);
-    }
-
+	    public void guardar(Usuario usuario){
+	    	usuarioRepo.save(usuario);
+	    }
+	
 	public Usuario porId(Long id) {
-
-		Optional<Usuario> usuarioOp = usuarioRepository.findById(id);
-
+		
+		Optional<Usuario> usuarioOp = usuarioRepo.findById(id);
+		
 		if (Optional.empty().equals(usuarioOp)) {
 			log.info("El id ingresado no existe.");
 		}
 		Usuario usuario = usuarioOp.get();
-
+		
 		return usuario;
 	}
-
-	public Usuario cargarDatosForm(LoginForm loginForm, Usuario usuario) {
-
-		usuario.setUserName(loginForm.getUserName());
-		usuario.setEmail(loginForm.getEmail());
-		usuario.setPassword(loginForm.getPass());
-
-		return usuario;
-	}
+	
+	
+//	public Usuario cargarDatosForm (LoginForm loginForm, Usuario usuario) {
+//		
+//		usuario.setEmail(loginForm.getEmail());
+//		usuario.setPass(loginForm.getPass());
+//		
+//		return usuario;
+//	}
 
 }

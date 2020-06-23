@@ -60,38 +60,39 @@ public class UsuarioController {
 	}
 	
 	
-	@PostMapping(path = "/alta")
-	@Operation (summary = "Alta usuario", description = "Ingrasa un objeto usuario a la base de datos")
+//	@PostMapping(path = "/alta")
+//	@Operation (summary = "Alta usuario", description = "Ingrasa un objeto usuario a la base de datos")
+//	
+//	public ResponseEntity<Usuario> altaUsuario(@RequestBody LoginForm loginForm) {
+//				
+//		log.info("metodo: altaUsuario.");
+//		
+//		Usuario usuario = new Usuario();
+//		
+//		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
+//		usuarioRepo.save(usuario);
+//	
+//		log.info("metodo: Usuario guardado.");
+//
+//		return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+//
+//	}
 	
-	public ResponseEntity<Usuario> altaUsuario(@RequestBody LoginForm loginForm) {
-				
-		log.info("metodo: altaUsuario.");
-		
-		Usuario usuario = new Usuario (null, null, null, null);
-		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
-		usuarioRepo.save(usuario);
-	
-		log.info("metodo: Usuario guardado.");
-
-		return new ResponseEntity<>(usuario, HttpStatus.CREATED);
-
-	}
-	
-	@PutMapping(path = "/modificar/{id}")
-	@Operation(summary = "modificarUsuario", description = "Recibe un Long id y un loginForm, busca el usuario por id y lo actualiza con los datos del formulario.")
-	public ResponseEntity<Usuario> modificarUsuario(@RequestBody LoginForm loginForm, @PathVariable Long id) {
-		
-		log.info("Metodo modificarUsuario: buscando usuario...");
-		Usuario usuario = usuarioServ.porId(id);
-		
-		log.info("Modificando usuario...");
-		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
-		usuarioRepo.save(usuario);
-		
-		log.info("Usuario modificado.");
-		return new ResponseEntity<>(usuario, HttpStatus.OK);
-
-	}
+//	@PutMapping(path = "/modificar/{id}")
+//	@Operation(summary = "modificarUsuario", description = "Recibe un Long id y un loginForm, busca el usuario por id y lo actualiza con los datos del formulario.")
+//	public ResponseEntity<Usuario> modificarUsuario(@RequestBody LoginForm loginForm, @PathVariable Long id) {
+//		
+//		log.info("Metodo modificarUsuario: buscando usuario...");
+//		Usuario usuario = usuarioServ.porId(id);
+//		
+//		log.info("Modificando usuario...");
+//		usuario = usuarioServ.cargarDatosForm(loginForm, usuario);
+//		usuarioRepo.save(usuario);
+//		
+//		log.info("Usuario modificado.");
+//		return new ResponseEntity<>(usuario, HttpStatus.OK);
+//
+//	}
 	
 	@DeleteMapping(path = "/borrar/{id}")
 	@Operation(summary = "borrarUsuario", description = "Recibe un Long id, busca el usuario por id y lo borra de la base de datos.")

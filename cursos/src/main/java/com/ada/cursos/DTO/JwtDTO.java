@@ -1,6 +1,5 @@
 package com.ada.cursos.DTO;
 
-
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -8,12 +7,12 @@ import java.util.Collection;
 public class JwtDTO {
     private String token;
     private String bearer = "Bearer";
-    private String userName;
+    private String nombreUsuario;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public JwtDTO(String token, String userName, Collection<? extends GrantedAuthority> authorities) {
+    public JwtDTO(String token, String nombreUsuario, Collection<? extends GrantedAuthority> authorities) {
         this.token = token;
-        this.userName = userName;
+        this.nombreUsuario = nombreUsuario;
         this.authorities = authorities;
     }
 
@@ -33,12 +32,12 @@ public class JwtDTO {
         this.bearer = bearer;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,17 +1,16 @@
 package com.ada.cursos.repository;
 
-import java.util.Optional;
 
+import com.ada.cursos.model.Usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ada.cursos.model.Usuario;
-
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByUserName(String nu);
-    boolean existsByUserName(String nu);
+    Optional<Usuario> findByNombreUsuario(String nu);
+    boolean existsByNombreUsuario(String nu);
     boolean existsByEmail(String email);
 }

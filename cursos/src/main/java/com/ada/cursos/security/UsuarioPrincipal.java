@@ -1,26 +1,26 @@
 package com.ada.cursos.security;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ada.cursos.model.Usuario;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UsuarioPrincipal implements UserDetails {
 
     private Long id;
-    private String userName;
+    private String nombreUsuario;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UsuarioPrincipal(Long id, String userName, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UsuarioPrincipal(Long id, String nombreUsuario, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.userName = userName;
+        this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -29,7 +29,7 @@ public class UsuarioPrincipal implements UserDetails {
     public static UsuarioPrincipal build(Usuario usuario){
         List<GrantedAuthority> authorities =
                 usuario.getRoles().stream().map(rol -> new SimpleGrantedAuthority(rol.getRolNombre().name())).collect(Collectors.toList());
-        return new UsuarioPrincipal(usuario.getId(), usuario.getUserName(), usuario.getEmail(), usuario.getPassword(), authorities);
+        return new UsuarioPrincipal(usuario.getId(), usuario.getNombreUsuario(), usuario.getEmail(), usuario.getPassword(), authorities);
     }
 
     public Long getId() {
@@ -52,7 +52,7 @@ public class UsuarioPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return nombreUsuario;
     }
 
     @Override

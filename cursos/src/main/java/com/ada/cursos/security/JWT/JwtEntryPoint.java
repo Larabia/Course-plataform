@@ -17,7 +17,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
     private static  final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException e) throws IOException, ServletException {
-        logger.error("faill método commence");
+        logger.error("Error en método commence");
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "credenciales erróneas");
     }
 }

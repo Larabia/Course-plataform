@@ -1,25 +1,25 @@
 package com.ada.cursos.DTO;
 
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class NuevoUsuario {
-   
+
+
     @NotBlank
     @Email
     private String email;
 
     @NotBlank
-    private String userName;
+    private String nombreUsuario;
 
     @NotBlank
     private String password;
 
     private Set<String> roles;
 
- 
+
 
     public String getEmail() {
         return email;
@@ -29,12 +29,12 @@ public class NuevoUsuario {
         this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     public String getPassword() {

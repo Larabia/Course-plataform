@@ -53,12 +53,12 @@ public class AuthController {
     public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("campos vacíos o email inválido"), HttpStatus.BAD_REQUEST);
-        if(usuarioService.existePorNombre(nuevoUsuario.getUserName()))
+        if(usuarioService.existePorNombre(nuevoUsuario.getNombreUsuario()))
             return new ResponseEntity(new Mensaje("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
         if(usuarioService.existePorEmail(nuevoUsuario.getEmail()))
             return new ResponseEntity(new Mensaje("ese email ya existe"), HttpStatus.BAD_REQUEST);
         Usuario usuario =
-                new Usuario(nuevoUsuario.getUserName(), nuevoUsuario.getEmail(),
+                new Usuario(nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
                         passwordEncoder.encode(nuevoUsuario.getPassword()));
         Set<String> rolesStr = nuevoUsuario.getRoles();
         Set<Rol> roles = new HashSet<>();
@@ -67,6 +67,10 @@ public class AuthController {
                 case "admin":
                     Rol rolAdmin = rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get();
                     roles.add(rolAdmin);
+                    break;                  
+                case "rep":
+                    Rol rolRep = rolService.getByRolNombre(RolNombre.ROLE_REP).get();
+                    roles.add(rolRep);
                     break;
                 default:
                     Rol rolUser = rolService.getByRolNombre(RolNombre.ROLE_USER).get();
@@ -83,7 +87,7 @@ public class AuthController {
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("campos vacíos o email inválido"), HttpStatus.BAD_REQUEST);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUsuario.getUserName(), loginUsuario.getPassword())
+                new UsernamePasswordAuthenticationToken(loginUsuario.getNombreUsuario(), loginUsuario.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
