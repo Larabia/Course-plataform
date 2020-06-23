@@ -50,7 +50,7 @@ public class RepService {
 		rep.setTipoDoc(repForm.getTipoDoc());
 		rep.setDoc(repForm.getDoc());
 		rep.setCargo(repForm.getCargo());
-		rep.setEmail(repForm.getEmail());
+		
 		
 		return rep;
 

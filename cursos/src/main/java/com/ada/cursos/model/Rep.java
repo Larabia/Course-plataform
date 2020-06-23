@@ -25,9 +25,7 @@ public class Rep {
 	private String tipoDoc;
 	private String doc;
 	private String cargo;
-	private String email;	
-
-	
+		
 		
 	public String getTipoDoc() {
 		return tipoDoc;
@@ -47,18 +45,7 @@ public class Rep {
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-//	public Empresa getEmpresa() {
-//		return empresa;
-//	}
-//	public void setEmpresa(Empresa empresa) {
-//		this.empresa = empresa;
-//	}
+
 	public Long getId() {
 		return id;
 	}

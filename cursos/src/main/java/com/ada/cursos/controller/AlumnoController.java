@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +55,7 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/listado")
+	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarAlumnos", description = "Lista todos los alumnos presentes en la base de datos.")
 	public ResponseEntity<List<Alumno>> listarAlumnos() {
 
@@ -66,6 +68,7 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/cursos-en-progreso")
+	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarCursosEnProgreso", description = "Trae una lista de cursos por alumno y la filtra por finalizado = false")
 	public ResponseEntity<List<Curso>> listarCursosEnProgreso(@RequestParam Long id) {
 
@@ -84,6 +87,7 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/cursos-finalizados")
+    @PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarCursosFinalizados", description = "Trae una lista de cursos por alumno y la filtra por finalizado = true")
 	public ResponseEntity<List<Curso>> listarCursosFinalizados(@RequestParam Long id) {
 
@@ -103,7 +107,6 @@ public class AlumnoController {
 
 	@PostMapping(path = "/alta")
 	@Operation(summary = "Alta Alumno", description = "Ingrasa un objeto alumno con datosSE a la base de datos")
-
 	public ResponseEntity<Alumno> altaAlumno(@RequestBody AlumnoForm alumnoForm) {
 
 		log.info("metodo: altaAlumno.");
@@ -135,6 +138,7 @@ public class AlumnoController {
 	}
 
 	@DeleteMapping(path = "/borrar/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
 
