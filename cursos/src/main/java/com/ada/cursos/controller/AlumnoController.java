@@ -55,8 +55,8 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/listado")
-	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarAlumnos", description = "Lista todos los alumnos presentes en la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Alumno>> listarAlumnos() {
 
 		log.info("Metodo listarAlumnos: listando alumnos...");
@@ -68,8 +68,8 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/cursos-en-progreso")
-	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarCursosEnProgreso", description = "Trae una lista de cursos por alumno y la filtra por finalizado = false")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursosEnProgreso(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosEnProgreso: buscando alumno id" + id);
@@ -87,8 +87,8 @@ public class AlumnoController {
 	}
 
 	@GetMapping(path = "/cursos-finalizados")
-    @PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "listarCursosFinalizados", description = "Trae una lista de cursos por alumno y la filtra por finalizado = true")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursosFinalizados(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosFinalizados: buscando alumno id" + id);
@@ -138,8 +138,8 @@ public class AlumnoController {
 	}
 
 	@DeleteMapping(path = "/borrar/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
 
 		log.info("Metodo borrarAlumno: buscando curso...");

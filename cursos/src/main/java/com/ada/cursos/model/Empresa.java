@@ -34,6 +34,7 @@ public class Empresa {
 	private String categoria;
 	private String añoFun;
 	private String tel;
+	private boolean aprobada;
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "rep_id")
     private Rep rep;	
@@ -43,6 +44,12 @@ public class Empresa {
 	
 	
 	
+	public boolean isAprobada() {
+		return aprobada;
+	}
+	public void setAprobada(boolean aprobada) {
+		this.aprobada = aprobada;
+	}
 	public List<Curso> getCursos() {
 		return cursos;
 	}
