@@ -10,8 +10,10 @@ _You can follow the progress of the proyect in https://trello.com/b/VJCuQfIH/tp-
 
 ## Built with 🛠️
 
-* [Hibernate](https://hibernate.org/) - framework 
 * [Maven](https://maven.apache.org/) - dependencies manager
+* [Hibernate](https://hibernate.org/) - framework 
 * [Spring Boot](https://spring.io/projects/spring-boot) - framework 
-* [Eclipse](https://www.eclipse.org/downloads/) - IDE
 * [mysql](https://www.mysql.com/products/workbench/) - Database service
+* [JWT y USER_ROLE](https://jwt.io/) - Security
+* [Eclipse](https://www.eclipse.org/downloads/) - IDE
+
