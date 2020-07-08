@@ -13,6 +13,7 @@ import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
 import com.ada.cursos.repository.CursoRepository;
+import com.google.common.collect.Lists;
 
 @Service
 public class CursoService {
@@ -25,6 +26,7 @@ public class CursoService {
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
+	
 	public Curso porId(Long id) {
 
 		Optional<Curso> cursoOp = cursoRepo.findById(id);
@@ -37,6 +39,28 @@ public class CursoService {
 		return curso;
 
 	}
+	
+	public Curso guardar(Curso curso) {
+
+		cursoRepo.save(curso);
+
+		return curso;
+	}
+
+	public void borrar(Curso curso) {
+
+		cursoRepo.delete(curso);
+		log.info("Curso borrado.");
+	}
+
+	public List<Curso> listar() {
+
+		Iterable<Curso> ListCursoIt = cursoRepo.findAll();
+		List<Curso> listadoCurso = Lists.newArrayList(ListCursoIt);
+
+		return listadoCurso;
+	}
+	
 
 	public Curso cargarDatosForm(CursoForm cursoForm, Curso curso) {
 
@@ -55,6 +79,23 @@ public class CursoService {
 		return curso;
 
 	}
+	
+	public List<Curso> listarAbiertos() {
+
+		Iterable<Curso> ListCurIt = cursoRepo.findByAbiertoTrue();
+		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
+
+		return cursosAbiertos;
+	}
+	
+	public List<Curso> listarConCategoria(String categoria) {
+
+		Iterable<Curso> ListCurIt = cursoRepo.findByCategoriaStartingWith(categoria);
+		List<Curso> cursosPorCat = Lists.newArrayList(ListCurIt);
+
+		return cursosPorCat;
+	}
+
 
 	public List<Curso> filtrarPorCategoria(List<Curso> cursosPorEmp, String categoria) {
 
