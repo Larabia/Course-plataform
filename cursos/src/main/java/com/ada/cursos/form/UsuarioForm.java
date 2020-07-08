@@ -2,11 +2,18 @@ package com.ada.cursos.form;
 
 public class UsuarioForm {
 	
+	private Long id;
 	private String nombreUsuario;
 	private String email;
 	private String password;
 	
 	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
