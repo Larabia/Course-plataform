@@ -38,6 +38,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    
 
     @Override
     @Bean
@@ -67,4 +68,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+    
+    @Override
+    public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) 
+    		throws Exception {
+    	web.ignoring().antMatchers("/v2/api-docs/**");
+    	web.ignoring().antMatchers("/swagger.json");
+    	web.ignoring().antMatchers("/swagger-ui.html");
+    	web.ignoring().antMatchers("/swagger-resources/**");
+    	web.ignoring().antMatchers("/webjars/**");
+    }
+    
+    
 }

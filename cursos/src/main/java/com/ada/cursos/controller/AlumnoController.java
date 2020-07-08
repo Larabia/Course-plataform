@@ -43,6 +43,7 @@ public class AlumnoController {
 
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
+	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "alumnoPorId", description = "Recibe como un Long id y devuelve el alumno con el id correspondiente.")
 	public ResponseEntity<Alumno> alumnoPorId(@PathVariable Long id) {
@@ -54,7 +55,7 @@ public class AlumnoController {
 		return new ResponseEntity<>(alumno, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarAlumnos", description = "Lista todos los alumnos presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Alumno>> listarAlumnos() {
@@ -105,7 +106,7 @@ public class AlumnoController {
 		return new ResponseEntity<>(cursosFinalizados, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation(summary = "Alta Alumno", description = "Ingrasa un objeto alumno con datosSE a la base de datos")
 	public ResponseEntity<Alumno> altaAlumno(@RequestBody AlumnoForm alumnoForm) {
 
@@ -121,12 +122,12 @@ public class AlumnoController {
 
 	}
 
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarAlumno", description = "Recibe un Long id y un AlumnoForm, busca el alumno por id y lo actualiza con los datos del formulario.")
-	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm, @PathVariable Long id) {
+	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm) {
 
 		log.info("Metodo modificarAlumno: buscando alumno...");
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno = alumnoServ.porId(alumnoForm.getId());
 
 		log.info("Modificando alumno...");
 		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
@@ -137,7 +138,7 @@ public class AlumnoController {
 
 	}
 
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {

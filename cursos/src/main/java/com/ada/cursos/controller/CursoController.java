@@ -53,7 +53,7 @@ public class CursoController {
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarCursos", description = "Lista todos los cursos presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursos() {
@@ -66,7 +66,7 @@ public class CursoController {
 		return new ResponseEntity<>(listadoCursos, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-abiertos")
+	@GetMapping(path = "/abiertos")
 	@Operation(summary = "listarAbiertos", description = "Lista todos los cursos que coinciden con abierto=true.")
 	public ResponseEntity<List<Curso>> listarAbiertos() {
 
@@ -78,7 +78,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-categoria")
+	@GetMapping(path = "/categoria")
 	@Operation(summary = "listarPorCategoria", description = "Recibe como parámetro un String categoría y lista todos los cursos cuya categoría coincide.")
 	public ResponseEntity<List<Curso>> listarPorCategoria(@RequestParam String categoria) {
 
@@ -90,7 +90,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorCat, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-empresa")
+	@GetMapping(path = "/empresa")
 	@Operation(summary = "listarPorEmpresa", description = "Trae una lista de cursos por empresa")
 	public ResponseEntity<List<Curso>> listarPorEmpresa(@RequestParam Long id) {
 
@@ -105,7 +105,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-empresa-y-categoria")
+	@GetMapping(path = "/empresa-y-categoria")
 	@Operation(summary = "listarPorEmpresaYcategoria", description = "Trae una lista de cursos por empresa y la filtra por categoria")
 	public ResponseEntity<List<Curso>> listarPorEmpresaYcategoria(@RequestParam Long id,
 			@RequestParam String categoria) {
@@ -123,7 +123,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorEmpYcat, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation(summary = "altaCurso", description = "Persiste un nuevo Curso en la base de datos.")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Curso> altaCurso(@RequestBody CursoForm cursoForm) {
@@ -146,7 +146,7 @@ public class CursoController {
 
 	}
 
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/{id}")
 	@Operation(summary = "modificarCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
@@ -163,7 +163,7 @@ public class CursoController {
 
 	}
 
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarCurso", description = "Recibe un Long id, busca el curso por id y borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarCurso(@PathVariable Long id) {
