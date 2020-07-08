@@ -19,7 +19,9 @@ import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.AlumnoRepository;
 import com.ada.cursos.repository.CursoRepository;
+import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.repository.UsuarioRepository;
+import com.google.common.collect.Lists;
 
 @Service
 public class AlumnoService {
@@ -29,6 +31,9 @@ public class AlumnoService {
 	
 	@Autowired
 	private AlumnoRepository alumnoRepo;
+	
+	@Autowired
+	private InscripcionRepository inscripcionRepo;
 
 	@Autowired
 	private DatosSEUtil datosSEUtil;
@@ -47,7 +52,29 @@ public class AlumnoService {
 		Alumno alumno = alumnoOp.get();
 		return alumno;
 	}
+	
+	public Alumno guardar(Alumno alumno) {
+		
+		alumnoRepo.save(alumno);
+		
+		return alumno;
+	}
      
+	public void borrar(Alumno alumno) {
+		
+		alumnoRepo.delete(alumno);
+		log.info("Alumno borrado.");
+	}
+     
+	
+	public List<Alumno> listar() {
+		
+		Iterable<Alumno> ListAlumIt = alumnoRepo.findAll();
+		List<Alumno> listadoAlumnos = Lists.newArrayList(ListAlumIt);
+		
+		return listadoAlumnos;
+	}
+	
 
 	public Alumno cargarDatosForm(AlumnoForm alumnoForm, Alumno alumno) {
 
@@ -83,6 +110,14 @@ public class AlumnoService {
 		} else {
 			return true;
 		}
+	}
+	
+	public List<Inscripcion> listarInscripciones(Alumno alumno) {
+		
+		Iterable<Inscripcion> listInscIt = inscripcionRepo.findByAlumno(alumno);
+		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
+		
+		return inscripciones;
 	}
 	
 	public List<Curso> filtrarPorFinalizadoFalse(List<Inscripcion> inscripciones) {
