@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ada.cursos.form.RepForm;
 import com.ada.cursos.model.Rep;
 import com.ada.cursos.repository.AlumnoRepository;
-import com.ada.cursos.repository.RepRepository;
 import com.ada.cursos.service.RepService;
-import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -30,8 +28,6 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping(path = "/rep")
 public class RepController {
 
-	@Autowired
-	private RepRepository repRepo;
 	
 	@Autowired
 	private RepService repServ;
@@ -51,21 +47,19 @@ public class RepController {
 		return new ResponseEntity<>(rep, HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarReps", description = "Lista todas los Reps presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<Rep>> listarEmpresas() {
+	public ResponseEntity<List<Rep>> listarReps() {
 
-		log.info("Metodo listarReps: listando cursos...");
-		Iterable<Rep> ListRepIt = repRepo.findAll();
-		List<Rep> listadoReps = Lists.newArrayList(ListRepIt);
+		log.info("Metodo listarReps: listando reps...");
+		List<Rep> listadoReps = repServ.listar();
 
 		log.info("Listado completo: listadoReps.");
 		return new ResponseEntity<>(listadoReps, HttpStatus.OK);
 	}
 
-
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation (summary = "Alta Rep", description = "Ingrasa un objeto Rep a la base de datos")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Rep> altaRep(@RequestBody RepForm repForm) {	
@@ -74,7 +68,7 @@ public class RepController {
 		
 		Rep rep = new Rep();		
 		rep = repServ.cargarDatosForm(repForm, rep);		
-		repRepo.save(rep);
+		repServ.guardar(rep);
 	
 		log.info("Rep guardado.");
 
@@ -82,24 +76,24 @@ public class RepController {
 
 	}
 	
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarRep", description = "Recibe un Long id y un RepForm, busca el rep por id y lo actualiza con los datos del formulario.")
 	@PreAuthorize("hasRole('REP')")
-	public ResponseEntity<Rep> modificarRep(@RequestBody RepForm repForm, @PathVariable Long id) {
+	public ResponseEntity<Rep> modificarRep(@RequestBody RepForm repForm) {
 		
 		log.info("Metodo modificarRep: buscando rep...");
-		Rep rep = repServ.porId(id);
+		Rep rep = repServ.porId(repForm.getId());
 		
 		log.info("Modificando rep...");
 		rep = repServ.cargarDatosForm(repForm, rep);
-		repRepo.save(rep);
+		repServ.guardar(rep);
 		
 		log.info("Rep modificado.");
 		return new ResponseEntity<>(rep, HttpStatus.OK);
 
 	}
 	
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarRep", description = "Recibe un Long id, busca el Rep por id y lo borra de la base de datos.")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Object> borrarRep(@PathVariable Long id) {
@@ -108,7 +102,7 @@ public class RepController {
 		Rep rep = repServ.porId(id);
 		
 		log.info("Borrando rep id  " + id);
-		repRepo.delete(rep);
+		repServ.borrar(rep);
 
 		log.info("Rep borrado.");
 		return new ResponseEntity<>(null, HttpStatus.OK);
