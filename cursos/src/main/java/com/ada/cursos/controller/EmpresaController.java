@@ -21,7 +21,6 @@ import com.ada.cursos.model.Empresa;
 
 import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.service.EmpresaService;
-import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -29,14 +28,13 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping(path = "/empresa")
 public class EmpresaController {
-	
-	@Autowired
-	private EmpresaRepository empresaRepo;
+
 	
 	@Autowired
 	private EmpresaService empresaServ;
 	
 	Logger log = Logger.getLogger(EmpresaRepository.class.getName());
+
 
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "empresaPorId", description = "Recibe como un Long id y devuelve un objeto Empresa con el id correspondiente.")
@@ -50,20 +48,19 @@ public class EmpresaController {
 		return new ResponseEntity<>(empresa, HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarEmpresas", description = "Lista todas las empresas presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Empresa>> listarEmpresas() {
 
 		log.info("Metodo listarCursos: listando cursos...");
-		Iterable<Empresa> ListEmpIt = empresaRepo.findAll();
-		List<Empresa> listadoEmpresas = Lists.newArrayList(ListEmpIt);
+		List<Empresa> listadoEmpresas = empresaServ.listar();
 
 		log.info("Listado completo: listadoEmpresas.");
 		return new ResponseEntity<>(listadoEmpresas, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation (summary = "Alta Empresa", description = "Ingrasa un objeto Empresa a la base de datos")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Empresa> altaEmpresa(@RequestBody EmpresaForm empresaForm) {	
@@ -72,7 +69,7 @@ public class EmpresaController {
 		
 		Empresa empresa = new Empresa();	
 	    empresa = empresaServ.cargarDatosForm(empresaForm, empresa);
-		empresaRepo.save(empresa);
+	    empresaServ.guardar(empresa);
 		
 		log.info("Empresa guardada.");
 
@@ -90,31 +87,31 @@ public class EmpresaController {
 		
 		log.info("Aprobando empresa...");
 		empresa.setAprobada(true);
-		empresaRepo.save(empresa);
+		empresaServ.guardar(empresa);
 		
 		log.info("Empresa aprobada.");
 		return new ResponseEntity<>(empresa, HttpStatus.OK);
 
 	}
 	
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarEmpresa", description = "Recibe un Long id y un EmpresaForm, busca la empresa por id y la actualiza con los datos del formulario.")
 	@PreAuthorize("hasRole('REP')")
-	public ResponseEntity<Empresa> modificarEmpresa(@RequestBody EmpresaForm empresaForm, @PathVariable Long id) {
+	public ResponseEntity<Empresa> modificarEmpresa(@RequestBody EmpresaForm empresaForm) {
 		
 		log.info("Metodo modificarEmpresa: buscando empresa...");
-		Empresa empresa = empresaServ.porId(id);
+		Empresa empresa = empresaServ.porId(empresaForm.getId());
 		
 		log.info("Modificando empresa...");
 		empresa = empresaServ.cargarDatosForm(empresaForm, empresa);
-		empresaRepo.save(empresa);
+		empresaServ.guardar(empresa);
 		
 		log.info("Empresa modificada.");
 		return new ResponseEntity<>(empresa, HttpStatus.OK);
 
 	}
 	
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarEmpresa", description = "Recibe un Long id, busca la empresa por id y la borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarEmpresa(@PathVariable Long id) {
@@ -123,7 +120,7 @@ public class EmpresaController {
 		Empresa empresa = empresaServ.porId(id);
 		
 		log.info("Borrando empresa id  " + id);
-		empresaRepo.delete(empresa);
+		empresaServ.borrar(empresa);
 
 		log.info("Empresa borrada.");
 		return new ResponseEntity<>(null, HttpStatus.OK);

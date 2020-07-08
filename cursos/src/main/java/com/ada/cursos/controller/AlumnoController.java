@@ -32,17 +32,13 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping(path = "/alumno")
 public class AlumnoController {
 
-	@Autowired
-	private AlumnoRepository alumnoRepo;
 
 	@Autowired
 	private AlumnoService alumnoServ;
-	
-	@Autowired
-	private InscripcionRepository inscripcionRepo;
 
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
+	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "alumnoPorId", description = "Recibe como un Long id y devuelve el alumno con el id correspondiente.")
 	public ResponseEntity<Alumno> alumnoPorId(@PathVariable Long id) {
@@ -54,14 +50,13 @@ public class AlumnoController {
 		return new ResponseEntity<>(alumno, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarAlumnos", description = "Lista todos los alumnos presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Alumno>> listarAlumnos() {
 
 		log.info("Metodo listarAlumnos: listando alumnos...");
-		Iterable<Alumno> ListAlumIt = alumnoRepo.findAll();
-		List<Alumno> listadoAlumnos = Lists.newArrayList(ListAlumIt);
+		List<Alumno> listadoAlumnos = alumnoServ.listar();
 
 		log.info("Listado completo: listadoAlumnos.");
 		return new ResponseEntity<>(listadoAlumnos, HttpStatus.OK);
@@ -75,9 +70,8 @@ public class AlumnoController {
 		log.info("Metodo listarCursosEnProgreso: buscando alumno id" + id);
 		Alumno alumno = alumnoServ.porId(id);
 
-		log.info("listando cursos...");
-		Iterable<Inscripcion> listInscIt = inscripcionRepo.findByAlumno(alumno);
-		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
+		log.info("listando cursos...");		
+		List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
 
 		log.info("filtrando cursos en progreso...");
 		List<Curso> cursosEnProgreso = alumnoServ.filtrarPorFinalizadoFalse(inscripciones);
@@ -95,8 +89,7 @@ public class AlumnoController {
 		Alumno alumno = alumnoServ.porId(id);
 
 		log.info("listando cursos...");
-		Iterable<Inscripcion> ListInscIt = inscripcionRepo.findByAlumno(alumno);
-		List<Inscripcion> inscripciones = Lists.newArrayList(ListInscIt);
+		List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
 
 		log.info("filtrando por categoria...");
 		List<Curso> cursosFinalizados = alumnoServ.filtrarPorFinalizadoTrue(inscripciones);
@@ -105,7 +98,7 @@ public class AlumnoController {
 		return new ResponseEntity<>(cursosFinalizados, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation(summary = "Alta Alumno", description = "Ingrasa un objeto alumno con datosSE a la base de datos")
 	public ResponseEntity<Alumno> altaAlumno(@RequestBody AlumnoForm alumnoForm) {
 
@@ -113,7 +106,7 @@ public class AlumnoController {
 
 		Alumno alumno = new Alumno();
 		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
-		alumnoRepo.save(alumno);
+		alumnoServ.guardar(alumno);
 
 		log.info("Alumno guardado.");
 
@@ -121,23 +114,23 @@ public class AlumnoController {
 
 	}
 
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarAlumno", description = "Recibe un Long id y un AlumnoForm, busca el alumno por id y lo actualiza con los datos del formulario.")
-	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm, @PathVariable Long id) {
+	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm) {
 
 		log.info("Metodo modificarAlumno: buscando alumno...");
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno = alumnoServ.porId(alumnoForm.getId());
 
 		log.info("Modificando alumno...");
 		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
-		alumnoRepo.save(alumno);
+		alumnoServ.guardar(alumno);
 
 		log.info("Alumno modificado.");
 		return new ResponseEntity<>(alumno, HttpStatus.OK);
 
 	}
 
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarAlumno", description = "Recibe un Long id, busca el Alumno por id y lo borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
@@ -146,9 +139,8 @@ public class AlumnoController {
 		Alumno alumno = alumnoServ.porId(id);
 
 		log.info("Borrando alumno id  " + id);
-		alumnoRepo.delete(alumno);
+		alumnoServ.borrar(alumno);
 
-		log.info("Alumno borrado.");
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 

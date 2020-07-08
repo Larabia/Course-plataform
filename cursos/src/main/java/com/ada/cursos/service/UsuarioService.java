@@ -1,5 +1,6 @@
 package com.ada.cursos.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import com.ada.cursos.form.UsuarioForm;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.UsuarioRepository;
+import com.google.common.collect.Lists;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +40,10 @@ public class UsuarioService {
 		return usuarioRepo.existsById(id);
 	}
 
-	public void guardar(Usuario usuario) {
+	public Usuario guardar(Usuario usuario) {
 		usuarioRepo.save(usuario);
+		
+		return usuario;
 	}
 
 	public Usuario porId(Long id) {
@@ -52,6 +56,21 @@ public class UsuarioService {
 		Usuario usuario = usuarioOp.get();
 
 		return usuario;
+	}
+     
+	public void borrar(Usuario usuario) {
+		
+		usuarioRepo.delete(usuario);
+		log.info("Usuario borrado.");
+	}
+     
+	
+	public List<Usuario> listar() {
+		
+		Iterable<Usuario> ListUsuarioIt = usuarioRepo.findAll();
+		List<Usuario> listadoUsuarios = Lists.newArrayList(ListUsuarioIt);
+		
+		return listadoUsuarios;
 	}
 
 	public Usuario cargarDatosForm(UsuarioForm usuarioForm, Usuario usuario) {

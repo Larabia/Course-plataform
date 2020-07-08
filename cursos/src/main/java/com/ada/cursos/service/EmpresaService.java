@@ -1,5 +1,6 @@
 package com.ada.cursos.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import com.ada.cursos.model.Rep;
 import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.EmpresaRepository;
 import com.ada.cursos.repository.RepRepository;
+import com.google.common.collect.Lists;
 
 
 @Service
@@ -37,6 +39,27 @@ public class EmpresaService {
 		Empresa empresa = empresaOp.get();
 		
 		return empresa;
+	}
+	
+	public Empresa guardar(Empresa empresa) {
+
+		empresaRepo.save(empresa);
+
+		return empresa;
+	}
+
+	public void borrar(Empresa empresa) {
+
+		empresaRepo.delete(empresa);
+		log.info("Empresa borrada.");
+	}
+
+	public List<Empresa> listar() {
+
+		Iterable<Empresa> ListEmpIt = empresaRepo.findAll();
+		List<Empresa> listadoEmp = Lists.newArrayList(ListEmpIt);
+
+		return listadoEmp;
 	}
 	
 	public Empresa cargarDatosForm(EmpresaForm empresaForm, Empresa empresa) {

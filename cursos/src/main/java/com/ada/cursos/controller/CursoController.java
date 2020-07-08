@@ -32,9 +32,6 @@ import io.swagger.v3.oas.annotations.Operation;
 public class CursoController {
 
 	@Autowired
-	private CursoRepository cursoRepo;
-
-	@Autowired
 	private CursoService cursoServ;
 
 	@Autowired
@@ -42,6 +39,7 @@ public class CursoController {
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
+	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "cursoPorId", description = "Recibe como un Long id y devuelve el Curso con el id correspondiente.")
 	public ResponseEntity<Curso> cursoPorId(@PathVariable Long id) {
@@ -53,44 +51,41 @@ public class CursoController {
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarCursos", description = "Lista todos los cursos presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Curso>> listarCursos() {
 
 		log.info("Metodo listarCursos: listando cursos...");
-		Iterable<Curso> ListCurIt = cursoRepo.findAll();
-		List<Curso> listadoCursos = Lists.newArrayList(ListCurIt);
+		List<Curso> listadoCursos = cursoServ.listar();
 
 		log.info("Listado completo: listadoCursos.");
 		return new ResponseEntity<>(listadoCursos, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-abiertos")
+	@GetMapping(path = "/abiertos")
 	@Operation(summary = "listarAbiertos", description = "Lista todos los cursos que coinciden con abierto=true.")
 	public ResponseEntity<List<Curso>> listarAbiertos() {
 
 		log.info("Metodo listarAbiertos: listando cursos abiertos...");
-		Iterable<Curso> ListCurIt = cursoRepo.findByAbiertoTrue();
-		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
+		List<Curso> cursosAbiertos = cursoServ.listarAbiertos();
 
 		log.info("Listado completo: cursosAbiertos.");
 		return new ResponseEntity<>(cursosAbiertos, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-categoria")
+	@GetMapping(path = "/categoria")
 	@Operation(summary = "listarPorCategoria", description = "Recibe como parámetro un String categoría y lista todos los cursos cuya categoría coincide.")
 	public ResponseEntity<List<Curso>> listarPorCategoria(@RequestParam String categoria) {
 
 		log.info("Metodo listarPorCategoria: listando cursos de la categoria " + categoria + "...");
-		Iterable<Curso> ListCurIt = cursoRepo.findByCategoriaStartingWith(categoria);
-		List<Curso> cursosPorCat = Lists.newArrayList(ListCurIt);
+		List<Curso> cursosPorCat = cursoServ.listarConCategoria(categoria);
 
 		log.info("Listado completo: cursosPorCat.");
 		return new ResponseEntity<>(cursosPorCat, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-empresa")
+	@GetMapping(path = "/empresa")
 	@Operation(summary = "listarPorEmpresa", description = "Trae una lista de cursos por empresa")
 	public ResponseEntity<List<Curso>> listarPorEmpresa(@RequestParam Long id) {
 
@@ -105,7 +100,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/listado-por-empresa-y-categoria")
+	@GetMapping(path = "/empresa-y-categoria")
 	@Operation(summary = "listarPorEmpresaYcategoria", description = "Trae una lista de cursos por empresa y la filtra por categoria")
 	public ResponseEntity<List<Curso>> listarPorEmpresaYcategoria(@RequestParam Long id,
 			@RequestParam String categoria) {
@@ -123,7 +118,7 @@ public class CursoController {
 		return new ResponseEntity<>(cursosPorEmpYcat, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation(summary = "altaCurso", description = "Persiste un nuevo Curso en la base de datos.")
 	@PreAuthorize("hasRole('REP')")
 	public ResponseEntity<Curso> altaCurso(@RequestBody CursoForm cursoForm) {
@@ -134,36 +129,36 @@ public class CursoController {
 		curso = cursoServ.cargarDatosForm(cursoForm, curso);
 
 		if (cursoServ.empresaAprobada(curso)) {
-			cursoRepo.save(curso);
+			cursoServ.guardar(curso);
 			log.info("Curso guardado.");
 			return new ResponseEntity<>(curso, HttpStatus.CREATED);
 
-		}else {
-			
+		} else {
+
 			log.info("La empresa aun no fue aprobada por el admin.");
 			return new ResponseEntity<>(curso, HttpStatus.METHOD_NOT_ALLOWED);
 		}
 
 	}
 
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarCurso", description = "Recibe un Long id y un CursoForm, busca el curso por id y lo actualiza con los datos del formulario.")
 	@PreAuthorize("hasRole('REP')")
-	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm, @PathVariable Long id) {
+	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm) {
 
 		log.info("Metodo modificarCurso: buscando curso...");
-		Curso curso = cursoServ.porId(id);
+		Curso curso = cursoServ.porId(cursoForm.getId());
 
 		log.info("Modificando curso...");
 		curso = cursoServ.cargarDatosForm(cursoForm, curso);
-		cursoRepo.save(curso);
+		cursoServ.guardar(curso);
 
 		log.info("Curso modificado.");
 		return new ResponseEntity<>(curso, HttpStatus.OK);
 
 	}
 
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarCurso", description = "Recibe un Long id, busca el curso por id y borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarCurso(@PathVariable Long id) {
@@ -172,7 +167,7 @@ public class CursoController {
 		Curso curso = cursoServ.porId(id);
 
 		log.info("Borrando curso id  " + id);
-		cursoRepo.delete(curso);
+		cursoServ.borrar(curso);
 
 		log.info("Curso borrado.");
 		return new ResponseEntity<>(null, HttpStatus.OK);

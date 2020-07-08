@@ -2,6 +2,7 @@ package com.ada.cursos.form;
 
 public class CursoForm {
 	
+	private Long id;
 	private String nombre;
 	private int horas;
 	private String modalidad;
@@ -13,6 +14,12 @@ public class CursoForm {
 	private boolean abierto;
 	
 	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public boolean isAbierto() {
 		return abierto;
 	}

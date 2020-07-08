@@ -54,6 +54,27 @@ public class InscripcionService {
 		return inscripcion;
 	}
 
+	public Inscripcion guardar(Inscripcion inscripcion) {
+
+		inscripRepo.save(inscripcion);
+
+		return inscripcion;
+	}
+
+	public void borrar(Inscripcion inscripcion) {
+
+		inscripRepo.delete(inscripcion);
+		log.info("Empresa borrada.");
+	}
+
+	public List<Inscripcion> listar() {
+
+		Iterable<Inscripcion> ListInscIt = inscripRepo.findAll();
+		List<Inscripcion> listadoInscripcion = Lists.newArrayList(ListInscIt);
+
+		return listadoInscripcion;
+	}
+
 	public Inscripcion cargarDatosForm(InscripcionForm inscripcionForm, Inscripcion inscripcion) {
 
 		Optional<Alumno> alumnoOp = alumnoRepo.findById(inscripcionForm.getAlumnoId());
@@ -69,9 +90,8 @@ public class InscripcionService {
 		Curso curso = cursoOp.get();
 
 		inscripcion.setAlumno(alumno);
-		inscripcion.setCurso(curso);		
+		inscripcion.setCurso(curso);
 		inscripcion.setConBeca(inscripcionForm.isConBeca());
-	
 
 		return inscripcion;
 
@@ -123,7 +143,7 @@ public class InscripcionService {
 		int cupo = curso.getCupo();
 
 		if (cupo == 0) {
-			
+
 			log.info("No quedan cupos disponibles en este curso.");
 			return false;
 
@@ -152,7 +172,7 @@ public class InscripcionService {
 	}
 
 	public boolean tieneBecasEnProgreso(Inscripcion inscripcion) {
-		
+
 		Alumno alumno = inscripcion.getAlumno();
 
 		Iterable<Inscripcion> listInscIt = inscripRepo.findByAlumno(alumno);
@@ -161,9 +181,9 @@ public class InscripcionService {
 		Iterator<Inscripcion> filtrarPorFinalizadoYbeca = inscripciones.iterator();
 
 		while (filtrarPorFinalizadoYbeca.hasNext()) {
-			
+
 			Inscripcion inscripcionIt = filtrarPorFinalizadoYbeca.next();
-			
+
 			if (!inscripcionIt.isFinalizado() && inscripcionIt.isBecaAprobada()) {
 				InscBecaEnProgreso.add(inscripcionIt);
 			}
@@ -177,12 +197,12 @@ public class InscripcionService {
 		}
 
 	}
-	
-	public boolean tieneDatosSE (Inscripcion inscripcion) {
-		
+
+	public boolean tieneDatosSE(Inscripcion inscripcion) {
+
 		Alumno alumno = inscripcion.getAlumno();
-		
-		if (alumno.getDatosSE()==null) {
+
+		if (alumno.getDatosSE() == null) {
 			log.info("El alumno no tiene cargados los datos SE.");
 			return false;
 		} else {
@@ -200,7 +220,8 @@ public class InscripcionService {
 				return false;
 			}
 		} else if (inscripcion.isConBeca()) {
-			if (hayCuposDisponiblesConBeca(inscripcion) && !tieneBecasEnProgreso(inscripcion) &&  tieneDatosSE(inscripcion)) {
+			if (hayCuposDisponiblesConBeca(inscripcion) && !tieneBecasEnProgreso(inscripcion)
+					&& tieneDatosSE(inscripcion)) {
 				return true;
 			} else {
 				return false;
@@ -209,6 +230,5 @@ public class InscripcionService {
 			return false;
 		}
 	}
-
 
 }

@@ -21,12 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.cursos.form.InscripcionForm;
 import com.ada.cursos.model.Inscripcion;
-import com.ada.cursos.repository.AlumnoRepository;
-import com.ada.cursos.repository.CursoRepository;
-import com.ada.cursos.repository.InscripcionRepository;
-import com.ada.cursos.repository.UsuarioRepository;
 import com.ada.cursos.service.InscripcionService;
-import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -34,18 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping(path = "/inscripcion")
 public class InscripcionController {
 
-	@Autowired
-	UsuarioRepository usuarioRepo;
-
-	@Autowired
-	AlumnoRepository alumnoRepo;
-
-	@Autowired
-	CursoRepository cursoRepo;
-
-	@Autowired
-	InscripcionRepository inscripcionRepo;
-
+	
 	@Autowired
 	InscripcionService inscripcionServ;
 
@@ -63,20 +47,19 @@ public class InscripcionController {
 		return new ResponseEntity<>(inscripcion, HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "/listado")
+	@GetMapping(path = "/")
 	@Operation(summary = "listarInscripciones", description = "Lista todos las inscripciones presentes en la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Inscripcion>> listarInscripciones() {
 
 		log.info("Metodo listarInscripciones: listando inscripciones...");
-		Iterable<Inscripcion> ListInscIt = inscripcionRepo.findAll();
-		List<Inscripcion> listadoInscripciones = Lists.newArrayList(ListInscIt);
+		List<Inscripcion> listadoInscripciones = inscripcionServ.listar();
 
 		log.info("Listado completo: listadoInscripciones.");
 		return new ResponseEntity<>(listadoInscripciones, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/alta")
+	@PostMapping(path = "/")
 	@Operation(summary = "Alta Inscripcion", description = "Ingrasa un objeto Inscripcion a la base de datos")
 	public ResponseEntity<Inscripcion> altaInscripcion(@RequestBody InscripcionForm inscripcionForm) {
 
@@ -88,8 +71,8 @@ public class InscripcionController {
 
 		if (inscripcionServ.cumpleRequisitos(inscripcion)) {
 		
-		inscripcionRepo.save(inscripcion);
-		inscripcionServ.actualizarCupo(inscripcion);;
+		inscripcionServ.guardar(inscripcion);
+		inscripcionServ.actualizarCupo(inscripcion);
 
 		log.info("metodo: Inscripcion guardada.");
 
@@ -102,17 +85,17 @@ public class InscripcionController {
 
 	}
 	
-	@PutMapping(path = "/modificar/{id}")
+	@PutMapping(path = "/")
 	@Operation(summary = "modificarInscripcion", description = "Recibe un Long id y un InscripcionForm, busca la inscripcion por id y lo actualiza con los datos del formulario.")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Inscripcion> modificarInscripcion(@RequestBody InscripcionForm inscripcionForm, @PathVariable Long id) {
+	public ResponseEntity<Inscripcion> modificarInscripcion(@RequestBody InscripcionForm inscripcionForm) {
 		
 		log.info("Metodo modificarInscripcion: buscando inscripcion...");
-		Inscripcion inscripcion = inscripcionServ.porId(id);
+		Inscripcion inscripcion = inscripcionServ.porId(inscripcionForm.getId());
 		
 		log.info("Modificando inscripcion...");
 		inscripcion = inscripcionServ.cargarDatosForm(inscripcionForm, inscripcion);
-		inscripcionRepo.save(inscripcion);	
+		inscripcionServ.guardar(inscripcion);	
 		inscripcionServ.actualizarCupo(inscripcion);
 		
 		log.info("Inscripcion modificada.");
@@ -132,7 +115,7 @@ public class InscripcionController {
 		if (inscripcionServ.cumpleRequisitos(inscripcion)) {
 		inscripcion.setBecaAprobada(true);
 		inscripcion.setPorcentBeca(porcentBeca);
-		inscripcionRepo.save(inscripcion);	
+		inscripcionServ.guardar(inscripcion);	
 		inscripcionServ.actualizarCupo(inscripcion);
 		
 		log.info("Beca aprobada.");
@@ -155,7 +138,7 @@ public class InscripcionController {
 		
 		log.info("Finalizando cursada...");
 		inscripcion.setFinalizado(true);
-		inscripcionRepo.save(inscripcion);	
+		inscripcionServ.guardar(inscripcion);	
 		inscripcionServ.actualizarCupo(inscripcion);
 		
 		log.info("Cursada finalizada.");
@@ -163,7 +146,7 @@ public class InscripcionController {
 
 	}
 	
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Operation(summary = "borrarInscripcion", description = "Recibe un Long id, busca la Inscripcion por id y la borra de la base de datos.")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> borrarInscripcion(@PathVariable Long id) {
@@ -172,7 +155,7 @@ public class InscripcionController {
 		Inscripcion inscripcion = inscripcionServ.porId(id);
 		
 		log.info("Borrando inscripcion id  " + id);
-		inscripcionRepo.delete(inscripcion);
+		inscripcionServ.borrar(inscripcion);
 
 		log.info("Inscripcion borrada.");
 		return new ResponseEntity<>(null, HttpStatus.OK);
