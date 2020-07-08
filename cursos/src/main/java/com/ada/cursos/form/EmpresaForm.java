@@ -2,6 +2,7 @@ package com.ada.cursos.form;
 
 public class EmpresaForm {
 	
+	private Long id;
 	private String nombre;
 	private String cuil;
 	private String tipo;
@@ -12,7 +13,13 @@ public class EmpresaForm {
     private Long repId;
 	
     
-    public String getTipo() {
+    public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getTipo() {
 		return tipo;
 	}
 	public void setTipo(String tipo) {

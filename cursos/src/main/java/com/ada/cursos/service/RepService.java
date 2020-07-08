@@ -15,51 +15,48 @@ import com.ada.cursos.repository.RepRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 import com.google.common.collect.Lists;
 
-
 @Service
 public class RepService {
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepo;
-	
+
 	@Autowired
 	private RepRepository repRepo;
-	
+
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
-	
-	
+
 	public Rep porId(Long id) {
-		
+
 		Optional<Rep> repOp = repRepo.findById(id);
-		
+
 		if (Optional.empty().equals(repOp)) {
 			log.info("El id ingresado no existe.");
 		}
-		
+
 		Rep rep = repOp.get();
-		
+
 		return rep;
 	}
-	
-public Rep guardar(Rep rep) {
-		
+
+	public Rep guardar(Rep rep) {
+
 		repRepo.save(rep);
-		
+
 		return rep;
 	}
-     
+
 	public void borrar(Rep rep) {
-		
+
 		repRepo.delete(rep);
 		log.info("Rep borrado.");
 	}
-     
-	
+
 	public List<Rep> listar() {
-		
+
 		Iterable<Rep> ListRepIt = repRepo.findAll();
 		List<Rep> listadoRep = Lists.newArrayList(ListRepIt);
-		
+
 		return listadoRep;
 	}
 
@@ -74,8 +71,7 @@ public Rep guardar(Rep rep) {
 		rep.setTipoDoc(repForm.getTipoDoc());
 		rep.setDoc(repForm.getDoc());
 		rep.setCargo(repForm.getCargo());
-		
-		
+
 		return rep;
 
 	}
