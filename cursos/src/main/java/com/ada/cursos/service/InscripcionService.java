@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
+import com.ada.cursos.exceptions.SinCupoException;
 import com.ada.cursos.form.InscripcionForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
@@ -18,6 +20,7 @@ import com.ada.cursos.repository.CursoRepository;
 import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.repository.UsuarioRepository;
 import com.google.common.collect.Lists;
+
 
 @Service
 public class InscripcionService {
@@ -42,12 +45,12 @@ public class InscripcionService {
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
-	public Inscripcion porId(Long id) {
+	public Inscripcion porId(Long id) throws IdInexistenteException {
 
 		Optional<Inscripcion> inscripcionOp = inscripRepo.findById(id);
 
 		if (Optional.empty().equals(inscripcionOp)) {
-			log.info("El id ingresado no existe.");
+			throw new IdInexistenteException ("El id ingresado no existe.");
 		}
 
 		Inscripcion inscripcion = inscripcionOp.get();
@@ -75,17 +78,17 @@ public class InscripcionService {
 		return listadoInscripcion;
 	}
 
-	public Inscripcion cargarDatosForm(InscripcionForm inscripcionForm, Inscripcion inscripcion) {
+	public Inscripcion cargarDatosForm(InscripcionForm inscripcionForm, Inscripcion inscripcion) throws IdInexistenteException{
 
 		Optional<Alumno> alumnoOp = alumnoRepo.findById(inscripcionForm.getAlumnoId());
 		if (Optional.empty().equals(alumnoOp)) {
-			log.info("El id de alumno ingresado no existe.");
+			throw new IdInexistenteException ("El id de alumno ingresado no existe.");
 		}
 		Alumno alumno = alumnoOp.get();
 
 		Optional<Curso> cursoOp = cursoRepo.findById(inscripcionForm.getCursoId());
 		if (Optional.empty().equals(cursoOp)) {
-			log.info("El id de curso ingresado no existe.");
+			throw new IdInexistenteException ("El id de curso ingresado no existe.");
 		}
 		Curso curso = cursoOp.get();
 
@@ -97,7 +100,7 @@ public class InscripcionService {
 
 	}
 
-	public void actualizarCupo(Inscripcion inscripcion) {
+	public void actualizarCupo(Inscripcion inscripcion) throws SinCupoException{
 
 		Curso curso = inscripcion.getCurso();
 		int cupo = curso.getCupo();
@@ -107,7 +110,7 @@ public class InscripcionService {
 
 			if (cupo == 0) {
 
-				log.info("No quedan cupos disponibles en este curso.");
+				throw new SinCupoException("No quedan cupos disponibles en este curso.");
 			} else {
 
 				curso.setCupo(cupo - 1);
@@ -118,7 +121,7 @@ public class InscripcionService {
 
 			if (cupoBecas == 0 || cupo == 0) {
 
-				log.info("No quedan becas disponibles en este curso.");
+				throw new SinCupoException("No quedan becas disponibles en este curso.");
 
 			} else {
 
@@ -144,7 +147,6 @@ public class InscripcionService {
 
 		if (cupo == 0) {
 
-			log.info("No quedan cupos disponibles en este curso.");
 			return false;
 
 		} else {
@@ -161,7 +163,7 @@ public class InscripcionService {
 		int cupoBecas = curso.getCupoBecas();
 
 		if (cupoBecas == 0 || cupo == 0) {
-			log.info("No quedan becas disponibles en este curso.");
+	
 			return false;
 
 		} else {
@@ -192,7 +194,6 @@ public class InscripcionService {
 		if (InscBecaEnProgreso.isEmpty()) {
 			return false;
 		} else {
-			log.info("El usuario tiene otras becas en progreso");
 			return true;
 		}
 

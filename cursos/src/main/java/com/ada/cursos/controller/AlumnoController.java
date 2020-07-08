@@ -22,9 +22,7 @@ import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Inscripcion;
 import com.ada.cursos.repository.AlumnoRepository;
-import com.ada.cursos.repository.InscripcionRepository;
 import com.ada.cursos.service.AlumnoService;
-import com.google.common.collect.Lists;
 
 import io.swagger.v3.oas.annotations.Operation;
 
