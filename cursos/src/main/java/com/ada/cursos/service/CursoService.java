@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
 import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
@@ -62,7 +63,7 @@ public class CursoService {
 	}
 	
 
-	public Curso cargarDatosForm(CursoForm cursoForm, Curso curso) {
+	public Curso cargarDatosForm(CursoForm cursoForm, Curso curso) throws IdInexistenteException {
 
 		Empresa empresa = empService.porId(cursoForm.getEmpId());
 
