@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
 import com.ada.cursos.form.UsuarioForm;
 import com.ada.cursos.model.Usuario;
 import com.ada.cursos.repository.CursoRepository;
@@ -46,12 +47,12 @@ public class UsuarioService {
 		return usuario;
 	}
 
-	public Usuario porId(Long id) {
+	public Usuario porId(Long id) throws IdInexistenteException {
 
 		Optional<Usuario> usuarioOp = usuarioRepo.findById(id);
 
 		if (Optional.empty().equals(usuarioOp)) {
-			log.info("El id ingresado no existe.");
+			throw new IdInexistenteException ("El id ingresado no existe.");
 		}
 		Usuario usuario = usuarioOp.get();
 
