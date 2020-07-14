@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
 import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
@@ -30,22 +31,27 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping(path = "/alumno")
 public class AlumnoController {
 
-
 	@Autowired
 	private AlumnoService alumnoServ;
 
 	Logger log = Logger.getLogger(AlumnoRepository.class.getName());
 
-	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "alumnoPorId", description = "Recibe como un Long id y devuelve el alumno con el id correspondiente.")
 	public ResponseEntity<Alumno> alumnoPorId(@PathVariable Long id) {
 
 		log.info("Metodo alumnoPorId: buscando alumno id" + id);
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno;
+		try {
+			alumno = alumnoServ.porId(id);
 
-		log.info("Alumno encontrado");
-		return new ResponseEntity<>(alumno, HttpStatus.OK);
+			log.info("Alumno encontrado");
+			return new ResponseEntity<>(alumno, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/")
@@ -66,16 +72,23 @@ public class AlumnoController {
 	public ResponseEntity<List<Curso>> listarCursosEnProgreso(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosEnProgreso: buscando alumno id" + id);
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno;
+		try {
+			alumno = alumnoServ.porId(id);
 
-		log.info("listando cursos...");		
-		List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
+			log.info("listando cursos...");
+			List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
 
-		log.info("filtrando cursos en progreso...");
-		List<Curso> cursosEnProgreso = alumnoServ.filtrarPorFinalizadoFalse(inscripciones);
+			log.info("filtrando cursos en progreso...");
+			List<Curso> cursosEnProgreso = alumnoServ.filtrarPorFinalizadoFalse(inscripciones);
 
-		log.info("Lista cursosEnProgreso creada.");
-		return new ResponseEntity<>(cursosEnProgreso, HttpStatus.OK);
+			log.info("Lista cursosEnProgreso creada.");
+			return new ResponseEntity<>(cursosEnProgreso, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/cursos-finalizados")
@@ -84,16 +97,23 @@ public class AlumnoController {
 	public ResponseEntity<List<Curso>> listarCursosFinalizados(@RequestParam Long id) {
 
 		log.info("Metodo listarCursosFinalizados: buscando alumno id" + id);
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno;
+		try {
+			alumno = alumnoServ.porId(id);
 
-		log.info("listando cursos...");
-		List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
+			log.info("listando cursos...");
+			List<Inscripcion> inscripciones = alumnoServ.listarInscripciones(alumno);
 
-		log.info("filtrando por categoria...");
-		List<Curso> cursosFinalizados = alumnoServ.filtrarPorFinalizadoTrue(inscripciones);
+			log.info("filtrando por categoria...");
+			List<Curso> cursosFinalizados = alumnoServ.filtrarPorFinalizadoTrue(inscripciones);
 
-		log.info("Lista cursosFinalizados creada.");
-		return new ResponseEntity<>(cursosFinalizados, HttpStatus.OK);
+			log.info("Lista cursosFinalizados creada.");
+			return new ResponseEntity<>(cursosFinalizados, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping(path = "/")
@@ -103,12 +123,19 @@ public class AlumnoController {
 		log.info("metodo: altaAlumno.");
 
 		Alumno alumno = new Alumno();
-		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
-		alumnoServ.guardar(alumno);
+		try {
+			alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
 
-		log.info("Alumno guardado.");
+			alumnoServ.guardar(alumno);
 
-		return new ResponseEntity<>(alumno, HttpStatus.CREATED);
+			log.info("Alumno guardado.");
+
+			return new ResponseEntity<>(alumno, HttpStatus.CREATED);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 
 	}
 
@@ -117,14 +144,21 @@ public class AlumnoController {
 	public ResponseEntity<Alumno> modificarAlumno(@RequestBody AlumnoForm alumnoForm) {
 
 		log.info("Metodo modificarAlumno: buscando alumno...");
-		Alumno alumno = alumnoServ.porId(alumnoForm.getId());
+		Alumno alumno;
+		try {
+			alumno = alumnoServ.porId(alumnoForm.getId());
 
-		log.info("Modificando alumno...");
-		alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
-		alumnoServ.guardar(alumno);
+			log.info("Modificando alumno...");
+			alumno = alumnoServ.cargarDatosForm(alumnoForm, alumno);
+			alumnoServ.guardar(alumno);
 
-		log.info("Alumno modificado.");
-		return new ResponseEntity<>(alumno, HttpStatus.OK);
+			log.info("Alumno modificado.");
+			return new ResponseEntity<>(alumno, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 
 	}
 
@@ -134,12 +168,19 @@ public class AlumnoController {
 	public ResponseEntity<Object> borrarAlumno(@PathVariable Long id) {
 
 		log.info("Metodo borrarAlumno: buscando curso...");
-		Alumno alumno = alumnoServ.porId(id);
+		Alumno alumno;
+		try {
+			alumno = alumnoServ.porId(id);
 
-		log.info("Borrando alumno id  " + id);
-		alumnoServ.borrar(alumno);
+			log.info("Borrando alumno id  " + id);
+			alumnoServ.borrar(alumno);
 
-		return new ResponseEntity<>(null, HttpStatus.OK);
+			return new ResponseEntity<>(null, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

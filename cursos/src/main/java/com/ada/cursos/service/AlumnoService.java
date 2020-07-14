@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
 import com.ada.cursos.form.AlumnoForm;
 import com.ada.cursos.model.Alumno;
 import com.ada.cursos.model.Curso;
@@ -28,57 +29,57 @@ public class AlumnoService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepo;
-	
+
 	@Autowired
 	private AlumnoRepository alumnoRepo;
-	
+
 	@Autowired
 	private InscripcionRepository inscripcionRepo;
 
 	@Autowired
 	private DatosSEUtil datosSEUtil;
-	
+
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
-	
- 
-	public Alumno porId(Long id) {
-		
+
+	public Alumno porId(Long id) throws IdInexistenteException {
+
 		Optional<Alumno> alumnoOp = alumnoRepo.findById(id);
-		
+
 		if (Optional.empty().equals(alumnoOp)) {
-			log.info("El id ingresado no existe.");
+			throw new IdInexistenteException("El id ingresado no existe.");
 		}
-		
+
 		Alumno alumno = alumnoOp.get();
 		return alumno;
 	}
-	
+
 	public Alumno guardar(Alumno alumno) {
-		
+
 		alumnoRepo.save(alumno);
-		
+
 		return alumno;
 	}
-     
+
 	public void borrar(Alumno alumno) {
-		
+
 		alumnoRepo.delete(alumno);
 		log.info("Alumno borrado.");
 	}
-     
-	
+
 	public List<Alumno> listar() {
-		
+
 		Iterable<Alumno> ListAlumIt = alumnoRepo.findAll();
 		List<Alumno> listadoAlumnos = Lists.newArrayList(ListAlumIt);
-		
+
 		return listadoAlumnos;
 	}
-	
 
-	public Alumno cargarDatosForm(AlumnoForm alumnoForm, Alumno alumno) {
+	public Alumno cargarDatosForm(AlumnoForm alumnoForm, Alumno alumno) throws IdInexistenteException {
 
 		java.util.Optional<Usuario> usuarioOp = usuarioRepo.findById(alumnoForm.getId());
+		if (Optional.empty().equals(usuarioOp)) {
+			throw new IdInexistenteException("El id de alumno ingresado no existe.");
+		}
 		Usuario usuario = usuarioOp.get();
 
 		DatosSE datosSE = datosSEUtil.nuevoDatosSE(alumnoForm);
@@ -101,75 +102,78 @@ public class AlumnoService {
 		return alumno;
 
 	}
-	
-	public boolean tieneDatosSE (Alumno alumno) {
-		
-		if (alumno.getDatosSE()==null) {
+
+	public boolean tieneDatosSE(Alumno alumno) {
+
+		if (alumno.getDatosSE() == null) {
 			log.info("El alumno no tiene cargados los datos SE.");
 			return false;
 		} else {
 			return true;
 		}
 	}
-	
+
 	public List<Inscripcion> listarInscripciones(Alumno alumno) {
-		
+
 		Iterable<Inscripcion> listInscIt = inscripcionRepo.findByAlumno(alumno);
 		List<Inscripcion> inscripciones = Lists.newArrayList(listInscIt);
-		
+
 		return inscripciones;
 	}
-	
+
 	public List<Curso> filtrarPorFinalizadoFalse(List<Inscripcion> inscripciones) {
-		
+
 		List<Inscripcion> InscCursosEnProgreso = new ArrayList<Inscripcion>();
+		if (Optional.empty().equals(InscCursosEnProgreso)) {
+			log.info("El alumno no tiene inscripciones en progreso.");
+		}
 		Iterator<Inscripcion> filtrarPorFinalizado = inscripciones.iterator();
-		
+
 		while (filtrarPorFinalizado.hasNext()) {
 			Inscripcion inscripcion = filtrarPorFinalizado.next();
-		    if(!inscripcion.isFinalizado()) {
-		    	InscCursosEnProgreso.add(inscripcion);              
-		    }
+			if (!inscripcion.isFinalizado()) {
+				InscCursosEnProgreso.add(inscripcion);
+			}
 		}
-		
+
 		List<Curso> CursosEnProgreso = traerCursosDeInscripciones(InscCursosEnProgreso);
-				
+
 		return CursosEnProgreso;
-			
 
 	}
-	
-	
+
 	public List<Curso> filtrarPorFinalizadoTrue(List<Inscripcion> inscripciones) {
-		
+
 		List<Inscripcion> InscCursosFinalizados = new ArrayList<Inscripcion>();
+		if (Optional.empty().equals(InscCursosFinalizados)) {
+			log.info("El alumno no tiene cursos finalizados.");
+		}
 		Iterator<Inscripcion> filtrarPorFinalizado = inscripciones.iterator();
-		
+
 		while (filtrarPorFinalizado.hasNext()) {
 			Inscripcion inscripcion = filtrarPorFinalizado.next();
-		    if(inscripcion.isFinalizado()) {
-		    	InscCursosFinalizados.add(inscripcion);              
-		    }
+			if (inscripcion.isFinalizado()) {
+				InscCursosFinalizados.add(inscripcion);
+			}
 		}
-		
+
 		List<Curso> CursosFinalizados = traerCursosDeInscripciones(InscCursosFinalizados);
-			
+
 		return CursosFinalizados;
 	}
-	
-	public List<Curso> traerCursosDeInscripciones (List<Inscripcion> inscripciones){
-		
+
+	public List<Curso> traerCursosDeInscripciones(List<Inscripcion> inscripciones) {
+
 		List<Curso> listaCursos = new ArrayList<Curso>();
 		Iterator<Inscripcion> filtrarCursos = inscripciones.iterator();
-		
+
 		while (filtrarCursos.hasNext()) {
 			Inscripcion inscripcion = filtrarCursos.next();
 			Curso curso = inscripcion.getCurso();
-			listaCursos.add(curso);              		    
+			listaCursos.add(curso);
 		}
-		
+
 		return listaCursos;
 	}
-
 
 }
