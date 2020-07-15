@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ada.cursos.exceptions.IdInexistenteException;
 import com.ada.cursos.form.CursoForm;
 import com.ada.cursos.model.Curso;
 import com.ada.cursos.model.Empresa;
@@ -39,16 +40,22 @@ public class CursoController {
 
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
-	
 	@GetMapping(path = "/{id}")
 	@Operation(summary = "cursoPorId", description = "Recibe como un Long id y devuelve el Curso con el id correspondiente.")
 	public ResponseEntity<Curso> cursoPorId(@PathVariable Long id) {
 
 		log.info("Metodo cursoPorId: buscando curso id" + id);
-		Curso curso = cursoServ.porId(id);
+		Curso curso;
+		try {
+			curso = cursoServ.porId(id);
 
-		log.info("Curso encontrado");
-		return new ResponseEntity<>(curso, HttpStatus.OK);
+			log.info("Curso encontrado");
+			return new ResponseEntity<>(curso, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/")
@@ -90,14 +97,21 @@ public class CursoController {
 	public ResponseEntity<List<Curso>> listarPorEmpresa(@RequestParam Long id) {
 
 		log.info("Metodo listarPorEmpresa: buscando empresa id" + id);
-		Empresa empresa = empServ.porId(id);
+		Empresa empresa;
+		try {
+			empresa = empServ.porId(id);
 
-		log.info("listando cursos...");
-		Iterable<Curso> ListCurIt = empresa.getCursos();
-		List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
+			log.info("listando cursos...");
+			Iterable<Curso> ListCurIt = empresa.getCursos();
+			List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
 
-		log.info("Listado completo: cursosPorEmp");
-		return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
+			log.info("Listado completo: cursosPorEmp");
+			return new ResponseEntity<>(cursosPorEmp, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping(path = "/empresa-y-categoria")
@@ -106,16 +120,23 @@ public class CursoController {
 			@RequestParam String categoria) {
 
 		log.info("Metodo listarPorEmpresaYcategoria: buscando empresa id" + id);
-		Empresa empresa = empServ.porId(id);
+		Empresa empresa;
+		try {
+			empresa = empServ.porId(id);
 
-		log.info("listando cursos...");
-		Iterable<Curso> ListCurIt = empresa.getCursos();
-		List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
+			log.info("listando cursos...");
+			Iterable<Curso> ListCurIt = empresa.getCursos();
+			List<Curso> cursosPorEmp = Lists.newArrayList(ListCurIt);
 
-		log.info("filtrando por categoria...");
-		List<Curso> cursosPorEmpYcat = cursoServ.filtrarPorCategoria(cursosPorEmp, categoria);
+			log.info("filtrando por categoria...");
+			List<Curso> cursosPorEmpYcat = cursoServ.filtrarPorCategoria(cursosPorEmp, categoria);
 
-		return new ResponseEntity<>(cursosPorEmpYcat, HttpStatus.OK);
+			return new ResponseEntity<>(cursosPorEmpYcat, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping(path = "/")
@@ -126,17 +147,23 @@ public class CursoController {
 		log.info("Metodo altaCurso: creando curso...");
 
 		Curso curso = new Curso();
-		curso = cursoServ.cargarDatosForm(cursoForm, curso);
+		try {
+			curso = cursoServ.cargarDatosForm(cursoForm, curso);
 
-		if (cursoServ.empresaAprobada(curso)) {
-			cursoServ.guardar(curso);
-			log.info("Curso guardado.");
-			return new ResponseEntity<>(curso, HttpStatus.CREATED);
+			if (cursoServ.empresaAprobada(curso)) {
+				cursoServ.guardar(curso);
+				log.info("Curso guardado.");
+				return new ResponseEntity<>(curso, HttpStatus.CREATED);
 
-		} else {
+			} else {
 
-			log.info("La empresa aun no fue aprobada por el admin.");
-			return new ResponseEntity<>(curso, HttpStatus.METHOD_NOT_ALLOWED);
+				log.info("La empresa aun no fue aprobada por el admin.");
+				return new ResponseEntity<>(curso, HttpStatus.METHOD_NOT_ALLOWED);
+			}
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -147,14 +174,21 @@ public class CursoController {
 	public ResponseEntity<Curso> modificarCurso(@RequestBody CursoForm cursoForm) {
 
 		log.info("Metodo modificarCurso: buscando curso...");
-		Curso curso = cursoServ.porId(cursoForm.getId());
+		Curso curso;
+		try {
+			curso = cursoServ.porId(cursoForm.getId());
 
-		log.info("Modificando curso...");
-		curso = cursoServ.cargarDatosForm(cursoForm, curso);
-		cursoServ.guardar(curso);
+			log.info("Modificando curso...");
+			curso = cursoServ.cargarDatosForm(cursoForm, curso);
+			cursoServ.guardar(curso);
 
-		log.info("Curso modificado.");
-		return new ResponseEntity<>(curso, HttpStatus.OK);
+			log.info("Curso modificado.");
+			return new ResponseEntity<>(curso, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 
 	}
 
@@ -164,13 +198,20 @@ public class CursoController {
 	public ResponseEntity<Object> borrarCurso(@PathVariable Long id) {
 
 		log.info("Metodo borrarCurso: buscando curso...");
-		Curso curso = cursoServ.porId(id);
+		Curso curso;
+		try {
+			curso = cursoServ.porId(id);
 
-		log.info("Borrando curso id  " + id);
-		cursoServ.borrar(curso);
+			log.info("Borrando curso id  " + id);
+			cursoServ.borrar(curso);
 
-		log.info("Curso borrado.");
-		return new ResponseEntity<>(null, HttpStatus.OK);
+			log.info("Curso borrado.");
+			return new ResponseEntity<>(null, HttpStatus.OK);
+
+		} catch (IdInexistenteException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

@@ -28,12 +28,12 @@ public class CursoService {
 	Logger log = Logger.getLogger(CursoRepository.class.getName());
 
 	
-	public Curso porId(Long id) {
+	public Curso porId(Long id) throws IdInexistenteException {
 
 		Optional<Curso> cursoOp = cursoRepo.findById(id);
 
 		if (Optional.empty().equals(cursoOp)) {
-			log.info("El id ingresado no existe.");
+			throw new IdInexistenteException ("El id de curso ingresado no existe.");
 		}
 
 		Curso curso = cursoOp.get();
@@ -84,6 +84,9 @@ public class CursoService {
 	public List<Curso> listarAbiertos() {
 
 		Iterable<Curso> ListCurIt = cursoRepo.findByAbiertoTrue();
+		if (Optional.empty().equals(ListCurIt)) {
+			log.info("No hay cursos abiertos.");
+		}
 		List<Curso> cursosAbiertos = Lists.newArrayList(ListCurIt);
 
 		return cursosAbiertos;
@@ -92,6 +95,9 @@ public class CursoService {
 	public List<Curso> listarConCategoria(String categoria) {
 
 		Iterable<Curso> ListCurIt = cursoRepo.findByCategoriaStartingWith(categoria);
+		if (Optional.empty().equals(ListCurIt)) {
+			log.info("No hay cursos de esa categoría.");
+		}
 		List<Curso> cursosPorCat = Lists.newArrayList(ListCurIt);
 
 		return cursosPorCat;
@@ -101,6 +107,9 @@ public class CursoService {
 	public List<Curso> filtrarPorCategoria(List<Curso> cursosPorEmp, String categoria) {
 
 		List<Curso> cursosPorEmpYcat = new ArrayList<Curso>();
+		if (Optional.empty().equals(cursosPorEmpYcat)) {
+			log.info("No hay cursos de esa categoría.");
+		}
 		Iterator<Curso> filtrarPorCat = cursosPorEmp.iterator();
 
 		while (filtrarPorCat.hasNext()) {
