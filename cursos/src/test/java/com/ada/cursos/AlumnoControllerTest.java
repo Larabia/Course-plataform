@@ -28,15 +28,29 @@ public class AlumnoControllerTest {
 			"\"cantFamiliares\": \"2\"\r\n" + 
 			"}";
 	
-	private String mockId = "6";
-	private String borrarId = "14";
+	private String id = "6";
+	
+	@Test
+	public void altaAlumno() throws UnirestException {
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.post("http://localhost:8080/alumno/")
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .header("Content-Type", "application/json")
+	      .body(alumnoForm)
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(201, jsonResponse.getStatus());
+	}
 	
 	@Test
 	public void alumnoPorId() throws UnirestException {
 	    
 	    HttpResponse<JsonNode> jsonResponse 
-	      = Unirest.get("http://localhost:8080/alumno/{mockId}")
-	      .routeParam("mockId", mockId)
+	      = Unirest.get("http://localhost:8080/alumno/{id}")
+	      .routeParam("id", id)
 	      .header("accept", "application/json")
 	      .header("Authorization", "Bearer " + token)
 	      .asJson();
@@ -64,7 +78,7 @@ public class AlumnoControllerTest {
 	      = Unirest.get("http://localhost:8080/alumno/cursos-en-progreso")
 	      .header("accept", "application/json")
 	      .header("Authorization", "Bearer " + token)
-	      .queryString("id", mockId)
+	      .queryString("id", id)
 	      .asJson();
 	 
 	    assertNotNull(jsonResponse.getBody());
@@ -78,27 +92,13 @@ public class AlumnoControllerTest {
 	      = Unirest.get("http://localhost:8080/alumno/cursos-finalizados")
 	      .header("accept", "application/json")
 	      .header("Authorization", "Bearer " + token)
-	      .queryString("id", mockId)
+	      .queryString("id", id)
 	      .asJson();
 	 
 	    assertNotNull(jsonResponse.getBody());
 	    assertEquals(200, jsonResponse.getStatus());
 	}
 	
-	@Test
-	public void altaAlumno() throws UnirestException {
-	    
-	    HttpResponse<JsonNode> jsonResponse 
-	      = Unirest.post("http://localhost:8080/alumno/")
-	      .header("accept", "application/json")
-	      .header("Authorization", "Bearer " + token)
-	      .header("Content-Type", "application/json")
-	      .body(alumnoForm)
-	      .asJson();
-	 
-	    assertNotNull(jsonResponse.getBody());
-	    assertEquals(201, jsonResponse.getStatus());
-	}
 	
 	@Test
 	public void modificarAlumno() throws UnirestException {
@@ -119,8 +119,8 @@ public class AlumnoControllerTest {
 	public void borrarAlumno() throws UnirestException {
 	    
 	    HttpResponse<JsonNode> jsonResponse 
-	      = Unirest.delete("http://localhost:8080/alumno/{borrarId}")
-	      .routeParam("borrarId", borrarId)
+	      = Unirest.delete("http://localhost:8080/alumno/{id}")
+	      .routeParam("id", id)
 	      .header("accept", "application/json")
 	      .header("Authorization", "Bearer " + token)
 	      .header("Content-Type", "application/json")
