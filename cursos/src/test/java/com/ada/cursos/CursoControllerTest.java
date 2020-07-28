@@ -50,7 +50,9 @@ public class CursoControllerTest {
 	@Test
 	public void listarPorCategoria() throws UnirestException {
 		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/listado-por-categoria")
-				.header("accept", "application/json").queryString("categoria", "cursoTEST2").asJson();
+				.header("accept", "application/json")
+				.queryString("categoria", "cursoTEST2")
+				.asJson();
 
 		assertNotNull(jsonResponse.getBody());
 		assertEquals(200, jsonResponse.getStatus());
@@ -65,21 +67,7 @@ public class CursoControllerTest {
 		assertEquals(200, jsonResponse.getStatus());
 	}
 
-//	@Test
-//	public void listarPorEmpresaYcategoria() throws UnirestException {
-//		
-//		Map<String, Object> fields = new HashMap<>();
-//	    fields.put("id", "2");
-//	    fields.put("categoria", "cursoTEST1");
-//	    
-//	    HttpResponse<JsonNode> jsonResponse 
-//	      = Unirest.get("http://localhost:8080/curso/listado-por-empresa-y-categoria")
-//	      .header("accept", "application/json").fields(fields)
-//	      .asJson();
-//
-//		assertNotNull(jsonResponse.getBody());
-//		assertEquals(200, jsonResponse.getStatus());
-//	}
+
 
 	@Test
 	public void altaCurso() throws UnirestException {
