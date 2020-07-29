@@ -64,7 +64,7 @@ public class UsuarioController {
 		return new ResponseEntity<>(listarUsuarios, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/")
+	@PutMapping(path = "/modificar")
 	@Operation(summary = "modificarUsuario", description = "Recibe un Long id y un loginForm, busca el usuario por id y lo actualiza con los datos del formulario.")
 	public ResponseEntity<Usuario> modificarUsuario(@RequestBody UsuarioForm usuarioForm) {
 

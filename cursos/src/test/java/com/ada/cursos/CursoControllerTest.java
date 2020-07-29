@@ -1,7 +1,5 @@
 package com.ada.cursos;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,127 +13,139 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-
-
 public class CursoControllerTest {
 
-
-	@Test
-	public void cursoPorId() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/{id}")
-				.header("accept", "application/json").routeParam("id", "3").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
-	}
-
-	@Test
-	public void listarCursos() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/listado")
-				.header("accept", "application/json").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
-	}
-
-	@Test
-	public void listarAbiertos() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/listado-abiertos")
-				.header("accept", "application/json").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
-	}
-
-	@Test
-	public void listarPorCategoria() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/listado-por-categoria")
-				.header("accept", "application/json").queryString("categoria", "cursoTEST2").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
-	}
-
-	@Test
-	public void listarPorEmpresa() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.get("http://localhost:8080/curso/listado-por-empresa")
-				.header("accept", "application/json").queryString("id", "2").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
-	}
-
-//	@Test
-//	public void listarPorEmpresaYcategoria() throws UnirestException {
-//		
-//		Map<String, Object> fields = new HashMap<>();
-//	    fields.put("id", "2");
-//	    fields.put("categoria", "cursoTEST1");
-//	    
-//	    HttpResponse<JsonNode> jsonResponse 
-//	      = Unirest.get("http://localhost:8080/curso/listado-por-empresa-y-categoria")
-//	      .header("accept", "application/json").fields(fields)
-//	      .asJson();
-//
-//		assertNotNull(jsonResponse.getBody());
-//		assertEquals(200, jsonResponse.getStatus());
-//	}
+	private String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnb2QiLCJpYXQiOjE1OTU5NzkyMTcsImV4cCI6MTU5NjAxNTIxN30.pjAh4_apmfcuOn6zSxNEi54Zg28uNDblPINZKoWouZ6iJv5fhmyrCRF6-WYG6kmt1c6YP8hfC4m1VD81eayiPg";
+	private String cursoForm = "{\n" + "\"empId\":\"1\",\n" + "\"nombre\":\"cursoTEST3\",\n" + "\"horas\": \"10\",\n"
+			+ "\"modalidad\":\"cursoTEST3\",\n" + "\"precio\":\"2000\",\n" + "\"categoria\":\"cursoTEST13\",\n"
+			+ "\"cupo\":\"2\",\n" + "\"cupoBecas\":\"1\",\n" + "\"abierto\":\"true\"\n" + "\n" + "}";
+	private String cursoForm2 = "{\n" + 
+			"\"id\":\"24\",\n" + 
+			"\"empId\":\"1\",\n" + 
+			"\"nombre\":\"modificado\",\n" + 
+			"\"horas\": \"10\",\n" + 
+			"\"modalidad\":\"modificado\",\n" + 
+			"\"precio\":\"2000\",\n" + 
+			"\"categoria\":\"cursoTEST22\",\n" + 
+			"\"cupo\":\"100\",\n" + 
+			"\"cupoBecas\":\"30\",\n" + 
+			"\"abierto\":\"true\"\n" + 
+			"\n" + 
+			"}";
+	private String id = "29";
+	private Long empId = (long) 1;
 
 	@Test
 	public void altaCurso() throws UnirestException {
-	       		
-	    Map<String, Object> fields = new HashMap<>();
-	    fields.put("empId", "2");
-	    fields.put("nombre", "cursoTEST4");
-	    fields.put("horas", "10");
-	    fields.put("modalidad", "online");
-	    fields.put("precio", "2000");
-	    fields.put("categoria", "cursoTEST1");
-	    fields.put("cupo", "10");
-	    fields.put("cupoBecas", "3");
-	    fields.put("abierto", "true");
+
+		HttpResponse<JsonNode> jsonResponse = Unirest.post("http://localhost:8080/curso/")
+				.header("accept", "application/json")
+				.header("Authorization", "Bearer " + token)
+				.header("Content-Type", "application/json")
+				.body(cursoForm).asJson();
+
+		assertNotNull(jsonResponse.getBody());
+		assertEquals(201, jsonResponse.getStatus());
+	}
+	
+	@Test
+	public void cursoPorId() throws UnirestException {
 	    
 	    HttpResponse<JsonNode> jsonResponse 
-	      = Unirest.post("http://localhost:8080/curso/alta")
-	      .header("Content-Type", "application/json").fields(fields)
+	      = Unirest.get("http://localhost:8080/curso/{id}")
+	      .routeParam("id", id)
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .queryString("porcentBeca", "50%")
 	      .asJson();
 	 
 	    assertNotNull(jsonResponse.getBody());
 	    assertEquals(200, jsonResponse.getStatus());
 	}
 	
+	@Test
+	public void listarCursos() throws UnirestException {
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.get("http://localhost:8080/curso/")
+	      .header("accept", "application/json").header("Authorization", "Bearer " + token)
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(200, jsonResponse.getStatus());
+	}
+	
+	@Test
+	public void listarPorCategoria() throws UnirestException {
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.get("http://localhost:8080/curso/categoria")
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .queryString("categoria", "cursoTEST1")
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(200, jsonResponse.getStatus());
+	}
+	
+	@Test
+	public void listarPorEmpresa() throws UnirestException {
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.get("http://localhost:8080/curso/empresa")
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .queryString("id", empId)
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(200, jsonResponse.getStatus());
+	}
+	
+	@Test
+	public void listarPorEmpresaYcategoria() throws UnirestException {
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.get("http://localhost:8080/curso/empresa-y-categoria")
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .queryString("id", empId)
+	      .queryString("categoria", "cursoTEST1")
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(200, jsonResponse.getStatus());
+	}
 	
 	@Test
 	public void modificarCurso() throws UnirestException {
-	       		
-	    Map<String, Object> fields = new HashMap<>();
-	    fields.put("empId", "2");
-	    fields.put("nombre", "MODIFICADO");
-	    fields.put("horas", "10");
-	    fields.put("modalidad", "online");
-	    fields.put("precio", "2000");
-	    fields.put("categoria", "cursoTEST1");
-	    fields.put("cupo", "10");
-	    fields.put("cupoBecas", "3");
-	    fields.put("abierto", "true");
 	    
 	    HttpResponse<JsonNode> jsonResponse 
-	      = Unirest.post("http://localhost:8080/curso/modificar/{id}")
-	      .header("Content-Type", "application/json").routeParam("id", "3")
-	      .fields(fields)
+	      = Unirest.put("http://localhost:8080/curso/")
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .header("Content-Type", "application/json")
+	      .body(cursoForm2)
 	      .asJson();
 	 
 	    assertNotNull(jsonResponse.getBody());
 	    assertEquals(200, jsonResponse.getStatus());
 	}
-
+	
 	@Test
 	public void borrarCurso() throws UnirestException {
-		HttpResponse<JsonNode> jsonResponse = Unirest.delete("http://localhost:8080/curso/borrar/{id}")
-				.header("accept", "application/json").routeParam("id", "7").asJson();
-
-		assertNotNull(jsonResponse.getBody());
-		assertEquals(200, jsonResponse.getStatus());
+	    
+	    HttpResponse<JsonNode> jsonResponse 
+	      = Unirest.delete("http://localhost:8080/curso/{id}")
+	      .routeParam("id", id)
+	      .header("accept", "application/json")
+	      .header("Authorization", "Bearer " + token)
+	      .header("Content-Type", "application/json")
+	      .asJson();
+	 
+	    assertNotNull(jsonResponse.getBody());
+	    assertEquals(200, jsonResponse.getStatus());
 	}
 
 }
