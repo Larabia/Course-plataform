@@ -26,7 +26,7 @@ public class InscripcionControllerTest {
 			"\"finalizado\":\"false\"\r\n" + 
 			"}";
 	
-	private String id = "15";
+	private String id = "4";
 	
 	@Test
 	public void altaInscripcion() throws UnirestException {
