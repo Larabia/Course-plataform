@@ -7,8 +7,6 @@ _This proyect is coded in java8 with frameworks: Maven, Hibernate and SpringBoot
 
 _You can follow the progress of the proyect in https://trello.com/b/VJCuQfIH/tp-plataforma-de-cursos._
 
-http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
-
 
 ## Built with 🛠️
 
