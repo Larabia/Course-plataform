@@ -7,6 +7,8 @@ _This proyect is coded in java8 with frameworks: Maven, Hibernate and SpringBoot
 
 _You can follow the progress of the proyect in https://trello.com/b/VJCuQfIH/tp-plataforma-de-cursos._
 
+http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+
 
 ## Built with 🛠️
 
@@ -18,6 +20,13 @@ _You can follow the progress of the proyect in https://trello.com/b/VJCuQfIH/tp-
 * [Spring Security](https://spring.io/projects/spring-security) - Security
 * [Swagger](https://swagger.io/) - Documentation
 * [Eclipse](https://www.eclipse.org/downloads/) - IDE
+
+
+## Documentacion 📌
+
+_Puedes ver la documentación del programa, corriendo el proyecto en tu ide e ingresando al siguiente link http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config _
+
+Ten en cuenta que el puerto en el que estas corriendo el proyecto debe coincidir con el puerto que figura en el link y necesitarás estar logueado como un usuario admin.
 
 
 ### Client requirements 📋
