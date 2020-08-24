@@ -22,9 +22,9 @@ _You can follow the progress of the proyect in https://trello.com/b/VJCuQfIH/tp-
 
 ## Documentacion 📌
 
-_Puedes ver la documentación del programa, corriendo el proyecto en tu ide e ingresando al siguiente link http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config _
+_To access de documentation run the program in your ide and enter in the following link  http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config _
 
-Ten en cuenta que el puerto en el que estas corriendo el proyecto debe coincidir con el puerto que figura en el link y necesitarás estar logueado como un usuario admin.
+Remember to check if you are running the program in the same port as the url (8080).
 
 
 ### Client requirements 📋
